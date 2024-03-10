@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[44762],{2511:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/open-cv","page":1,"postsPerPage":10,"totalPages":1,"totalCount":6,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

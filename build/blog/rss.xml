@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>学习笔记 Blog</title>
+        <link>https://cttmayi.github.io/blog</link>
+        <description>学习笔记 Blog</description>
+        <lastBuildDate>Tue, 26 Nov 2019 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>zh-Hans</language>
+        <item>
+            <title><![CDATA[printk 打印的参数异常问题]]></title>
+            <link>https://cttmayi.github.io/blog/2019/11/26/printk打印的参数异常问题</link>
+            <guid>https://cttmayi.github.io/blog/2019/11/26/printk打印的参数异常问题</guid>
+            <pubDate>Tue, 26 Nov 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[如下一句简单的打印函数, 发现打印b的结果很奇怪, 不符合预期, 那可能是什么原因呢?]]></description>
+            <content:encoded><![CDATA[<p>如下一句简单的打印函数, 发现打印b的结果很奇怪, 不符合预期, 那可能是什么原因呢?</p>
+<div class="language-C language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token function" style="color:#d73a49">printk</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"A=%d, B=%d"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> a</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> b</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>printk 属于变参函数, 那我们就从C语言的变参函数入手.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="变参函数范例">变参函数范例<a href="https://cttmayi.github.io/blog/2019/11/26/printk%E6%89%93%E5%8D%B0%E7%9A%84%E5%8F%82%E6%95%B0%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98#%E5%8F%98%E5%8F%82%E5%87%BD%E6%95%B0%E8%8C%83%E4%BE%8B" class="hash-link" aria-label="变参函数范例的直接链接" title="变参函数范例的直接链接">​</a></h2>
+<p>如下一个简单的任意多个加数的求和函数函数</p>
+<div class="language-C language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">sum</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> num</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">.</span><span class="token punctuation" style="color:#393A34">.</span><span class="token punctuation" style="color:#393A34">.</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 这里的num不是自动的, 需要调用者手动传入.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">  </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    va_list argptr</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token function" style="color:#d73a49">va_start</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">argptr</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> num</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 注释1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">for</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">num</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 注释2</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">  </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         arg </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">va_arg</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">argptr</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">//注释3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         total </span><span class="token operator" style="color:#393A34">+=</span><span class="token plain"> arg</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token function" style="color:#d73a49">va_end</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">argptr</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">//无实际意义, 只是从逻辑上表示后续不在使用argptr</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">total</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>注释1:
+函数参数存储于栈中, 通过最后一个参数num在栈中的偏移量, 是可以找到可变参数中的第1个参数的位置.</li>
+<li>注释2:
+可变参数的个数是需要手动传入的, 无法自动获得</li>
+<li>注释3
+获取参数的值需要特别指定参数类型, 有2个作用<!-- -->
+<ul>
+<li>获取正确的值</li>
+<li>获取下一个参数的偏移量</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="printk-变参实现">printk 变参实现<a href="https://cttmayi.github.io/blog/2019/11/26/printk%E6%89%93%E5%8D%B0%E7%9A%84%E5%8F%82%E6%95%B0%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98#printk-%E5%8F%98%E5%8F%82%E5%AE%9E%E7%8E%B0" class="hash-link" aria-label="printk 变参实现的直接链接" title="printk 变参实现的直接链接">​</a></h2>
+<div class="language-C language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token function" style="color:#d73a49">printk</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"A=%d, B=%d"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> a</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> b</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>通过第1个参数"A=%d, B=%d", printk函数可以计算函数参数的个数(2个%d, 表示2个参数)</li>
+<li>通过%d的内容, 就可以知道参数的类型</li>
+</ul>
+<p>这里你就可以注意到一个问题, 如果%d指定的类型不符合, 是否会导致错误呢? 答案是一定的, 不仅仅是影响本参数, 而且还会影响下一个的参数, 因为参数的偏移量会计算错误.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="结论">结论<a href="https://cttmayi.github.io/blog/2019/11/26/printk%E6%89%93%E5%8D%B0%E7%9A%84%E5%8F%82%E6%95%B0%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98#%E7%BB%93%E8%AE%BA" class="hash-link" aria-label="结论的直接链接" title="结论的直接链接">​</a></h2>
+<p>错误的原因可能有二, 具体参考如下图</p>
+<ol>
+<li>a的类型指定错误</li>
+<li>b的类型指定错误</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-1988ff69-5381cd26483e4eb491174680db8c5c0d.png" width="1237" height="677" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="另注-printk可用的格式字符">另注: printk可用的格式字符<a href="https://cttmayi.github.io/blog/2019/11/26/printk%E6%89%93%E5%8D%B0%E7%9A%84%E5%8F%82%E6%95%B0%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98#%E5%8F%A6%E6%B3%A8-printk%E5%8F%AF%E7%94%A8%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%AD%97%E7%AC%A6" class="hash-link" aria-label="另注: printk可用的格式字符的直接链接" title="另注: printk可用的格式字符的直接链接">​</a></h2>
+<div class="language-C language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">If variable is of Type</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">		use printk format specifier</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">--</span><span class="token operator" style="color:#393A34">-</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">int</span><span class="token plain">			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">d or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">x</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">unsigned</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain">		</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">u or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">x</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">long</span><span class="token plain">			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">ld or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">lx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">unsigned</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">long</span><span class="token plain">		</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">lu or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">lx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">long</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">long</span><span class="token plain">		</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">lld or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token keyword" style="color:#00009f">unsigned</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">long</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">long</span><span class="token plain">	</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llu or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token class-name">size_t</span><span class="token plain">			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">zu or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">zx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		</span><span class="token class-name">ssize_t</span><span class="token plain">			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">zd or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">zx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		s32			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">d or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">x</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		u32			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">u or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">x</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		s64			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">lld or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llx</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">		u64			</span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llu or </span><span class="token operator" style="color:#393A34">%</span><span class="token plain">llx</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>]]></content:encoded>
+            <category>C语言</category>
+            <category>变参函数</category>
+            <category>printk</category>
+        </item>
+        <item>
+            <title><![CDATA[正确的决策不等于会有正确的结果]]></title>
+            <link>https://cttmayi.github.io/blog/2019/11/20/正确的决策不等于会有正确的结果</link>
+            <guid>https://cttmayi.github.io/blog/2019/11/20/正确的决策不等于会有正确的结果</guid>
+            <pubDate>Wed, 20 Nov 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[公司每年都有读书会, 发现一个很有趣的现象. 分享的内容总是让人感觉是以结果论英雄.]]></description>
+            <content:encoded><![CDATA[<p>公司每年都有读书会, 发现一个很有趣的现象. 分享的内容总是让人感觉是以结果论英雄.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="失败的决策">失败的决策?<a href="https://cttmayi.github.io/blog/2019/11/20/%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%86%B3%E7%AD%96%E4%B8%8D%E7%AD%89%E4%BA%8E%E4%BC%9A%E6%9C%89%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%BB%93%E6%9E%9C#%E5%A4%B1%E8%B4%A5%E7%9A%84%E5%86%B3%E7%AD%96" class="hash-link" aria-label="失败的决策?的直接链接" title="失败的决策?的直接链接">​</a></h2>
+<p>公司曾经设定了一个目标, 进攻高端市场, 具体细节就不便提及了. 后来目标执行失败了. 于是这个目标的执行便成为公司内部读书会的常客.</p>
+<p>分享者抓住失败, 便大肆的利用书中的观点开始批判公司决策是多么的错误. 每次分享者在分享的时候, 我都有一个疑问, 如果目标成功了, 做法一样, 肯定就不会这样说了吧.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="成功含有一定的运气">成功含有一定的运气<a href="https://cttmayi.github.io/blog/2019/11/20/%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%86%B3%E7%AD%96%E4%B8%8D%E7%AD%89%E4%BA%8E%E4%BC%9A%E6%9C%89%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%BB%93%E6%9E%9C#%E6%88%90%E5%8A%9F%E5%90%AB%E6%9C%89%E4%B8%80%E5%AE%9A%E7%9A%84%E8%BF%90%E6%B0%94" class="hash-link" aria-label="成功含有一定的运气的直接链接" title="成功含有一定的运气的直接链接">​</a></h2>
+<p>其实, 正确的决策不等于会有正确的结果. 我们应该把每一次决策看做是一个概率问题. 正确的决策是选择做高概率可成功的事情, 但高概率也不等于一定成功, 成功需要有一定的运气.</p>
+<p>举个例子, 2个相反的选择(假设收益一样), A选择80%概率成功, B选择20%概率成功. 你选择了A, 但最后的结果却是B. 你可以做A是一个错误的选择吗? 不管结果如何, A就是一个正确的决策, 只是最后的结果并不能令人满意.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="两点启示">两点启示<a href="https://cttmayi.github.io/blog/2019/11/20/%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%86%B3%E7%AD%96%E4%B8%8D%E7%AD%89%E4%BA%8E%E4%BC%9A%E6%9C%89%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%BB%93%E6%9E%9C#%E4%B8%A4%E7%82%B9%E5%90%AF%E7%A4%BA" class="hash-link" aria-label="两点启示的直接链接" title="两点启示的直接链接">​</a></h2>
+<ul>
+<li>
+<p>不要孤注一掷
+既然我们不能保证每个决策必然成功, 那我们凡事不能孤注一掷. 要想成功, 我们需要分散风险, 一直去做高概率成功的事情.</p>
+</li>
+<li>
+<p>审视决策的过程, 而不是成败的结果.</p>
+</li>
+</ul>]]></content:encoded>
+            <category>决策</category>
+            <category>随笔</category>
+        </item>
+        <item>
+            <title><![CDATA[资产定义]]></title>
+            <link>https://cttmayi.github.io/blog/2019/11/19/资产定义</link>
+            <guid>https://cttmayi.github.io/blog/2019/11/19/资产定义</guid>
+            <pubDate>Tue, 19 Nov 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[什么是资产，能为你产生现金流的物件]]></description>
+            <content:encoded><![CDATA[<p>什么是资产，能为你产生现金流的物件</p>
+<p>对于普通投资者，一般只有一线城市的房产及上市公司的股权</p>
+<p>额外的，如人脉，也是一种投资</p>
+<p>一般稳定的投资不能都要以一个比较长的时间为周期，比如5年到10年</p>]]></content:encoded>
+            <category>生活</category>
+            <category>金融学</category>
+            <category>哲学</category>
+            <category>人生</category>
+        </item>
+        <item>
+            <title><![CDATA[高效能人士的七个习惯 - 习惯三 (要事第一)]]></title>
+            <link>https://cttmayi.github.io/blog/2019/11/14/高效能人士的七个习惯习惯三要事第一</link>
+            <guid>https://cttmayi.github.io/blog/2019/11/14/高效能人士的七个习惯习惯三要事第一</guid>
+            <pubDate>Thu, 14 Nov 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[要事第一, 这不是句废话吗? 什么才是要事吗?]]></description>
+            <content:encoded><![CDATA[<p>要事第一, 这不是句废话吗? 什么才是要事吗?</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="什么才是要事">什么才是要事?<a href="https://cttmayi.github.io/blog/2019/11/14/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%B8%89%E8%A6%81%E4%BA%8B%E7%AC%AC%E4%B8%80#%E4%BB%80%E4%B9%88%E6%89%8D%E6%98%AF%E8%A6%81%E4%BA%8B" class="hash-link" aria-label="什么才是要事?的直接链接" title="什么才是要事?的直接链接">​</a></h2>
+<p>我们把事情按重要程度, 紧急程度分为四类, 及重要紧急, 重要不紧急, 不重要紧急, 不重要不紧急. 毫无疑问, 第一直觉的要事就是重要紧急的事务. 我们必须尽快去解决危机, 解决迫切问题.
+这个直觉其实是错误的, 真正的<strong>要事</strong>是第二类事务(重要不紧急). 第二类事务就是哪些防御性措施, 建立关系等事务 仔细想想, 你就会发现, 如你都做好防御措施, 是否可以有机会避免危机呢. 所以, 你真正需要关心的要事是那些重要但不紧急的事情.</p>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-dc7ffddc-1a3222304f3e92517739fa9d46f7b7db.png" width="1100" height="968" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="勇于说不">勇于说"不"<a href="https://cttmayi.github.io/blog/2019/11/14/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%B8%89%E8%A6%81%E4%BA%8B%E7%AC%AC%E4%B8%80#%E5%8B%87%E4%BA%8E%E8%AF%B4%E4%B8%8D" class="hash-link" aria-label="勇于说&quot;不&quot;的直接链接" title="勇于说&quot;不&quot;的直接链接">​</a></h2>
+<p>如要专注于要事, 就需要排除次要事务的牵绊, 此时需要有说"不"的勇气. 应该不卑不亢地拒绝别人, 在紧急与重要之间, 知道取舍.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="自我管理四步骤">自我管理四步骤<a href="https://cttmayi.github.io/blog/2019/11/14/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%B8%89%E8%A6%81%E4%BA%8B%E7%AC%AC%E4%B8%80#%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86%E5%9B%9B%E6%AD%A5%E9%AA%A4" class="hash-link" aria-label="自我管理四步骤的直接链接" title="自我管理四步骤的直接链接">​</a></h2>
+<p>书中描述了四个步骤, 核心是按周安排要事.</p>
+<ul>
+<li>确认角色
+写出你自己的关键角色, 比如, 父母, 经理等等.</li>
+<li>选择目标
+思考下一周计划中每个角色中你最想做的一两件要事</li>
+<li>安排进度
+为每一项目标安排具体的实施时间.</li>
+<li>每日调整
+根据突发事件, 人际关系的意外发展及崭新机会, 对每天的要务安排进行适当调整.</li>
+</ul>]]></content:encoded>
+            <category>高效能人士的七个习惯</category>
+            <category>读书</category>
+            <category>笔记</category>
+        </item>
+        <item>
+            <title><![CDATA[奇葩说 - 樊登vs高晓松]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/31/奇葩说樊登vs高晓松</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/31/奇葩说樊登vs高晓松</guid>
+            <pubDate>Thu, 31 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[今天看到一篇文章\, 觉得很有趣. 我还是樊登读书会的会员呢, 不会那么夸张吧. 也去看了几遍视频.]]></description>
+            <content:encoded><![CDATA[<p>今天看到一篇文章&lt;<a href="https://www.jianshu.com/p/544ade149b86" target="_blank" rel="noopener noreferrer">樊登为什么会在《奇葩大会》败走麦城?</a>&gt;, 觉得很有趣. 我还是樊登读书会的会员呢, 不会那么夸张吧. 也去看了几遍<a href="https://www.iqiyi.com/v_19rrcp3kuo.html?list=19rrlsy1nq##curid=1035338300_53d6a2111fcc96753ce81225a76ea32c" target="_blank" rel="noopener noreferrer">视频</a>.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="樊的观点">樊的观点<a href="https://cttmayi.github.io/blog/2019/10/31/%E5%A5%87%E8%91%A9%E8%AF%B4%E6%A8%8A%E7%99%BBvs%E9%AB%98%E6%99%93%E6%9D%BE#%E6%A8%8A%E7%9A%84%E8%A7%82%E7%82%B9" class="hash-link" aria-label="樊的�观点的直接链接" title="樊的观点的直接链接">​</a></h2>
+<p>总结了一下, 樊登老师的开场3分钟大致表达了如下几个点.</p>
+<ul>
+<li>读书是<strong>必需</strong>品, 是一件要命的事情.</li>
+<li>在教育孩子的时候, 如果你觉得痛苦, <strong>一定</strong>是方法不对.</li>
+<li>在你的生活中有任何困难, 都<strong>一定</strong>有一本书等着你.</li>
+</ul>
+<p>你可以非常清晰的感觉到, 他的用词非常肯定. 但一讲到绝对的东西, 到了辩论场上, 几乎就很难辩护. 记得很久前, 同事争论一个话题"能力一定可以通过努力改变"(这是&lt;终身成长&gt;的成长型思维模式的一个变相说法), 但就是因为我使用了"一定"这个词语, 就让我很难解释这样的观点的正确性. 因为同事可以举出各种各样反例去表达它的错误. 一定这个词语很有力量, 但在某些人(不认同你观点的, 抬杠的, 不喜欢你这个人的)眼中, 那就叫"漏洞百出".  <strong>"一定"表达了自信, 但用于说服他人, 并不容易.</strong></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="高樊互怼的过程">高/樊互怼的过程<a href="https://cttmayi.github.io/blog/2019/10/31/%E5%A5%87%E8%91%A9%E8%AF%B4%E6%A8%8A%E7%99%BBvs%E9%AB%98%E6%99%93%E6%9D%BE#%E9%AB%98%E6%A8%8A%E4%BA%92%E6%80%BC%E7%9A%84%E8%BF%87%E7%A8%8B" class="hash-link" aria-label="高/樊互怼的过程的直接链接" title="高/樊互怼的过程的直接链接">​</a></h2>
+<ul>
+<li>高晓松老师: “读书如果能这么简单的三段论的解决问题，那这世界也太容易了一点."</li>
+<li>樊登老师: "那韩寒不都说过了吗? 我听过了世间所有的道理, 但仍然过不好这一生. 那为什么有人听了就过好了呢? 没过好这一生, 难道怪道理喽?"</li>
+<li>樊登老师举例了马云阿里巴巴的三力(心力, 脑力, 体力).</li>
+<li>高晓松老师: "马云这三力都不是看书来的."</li>
+<li>樊登老师: "他可以写书教别人."</li>
+<li>樊登老师，“我们不教给大家答案，我们倡导的是，你去努力的学习，总会有所收获，学习就是提供一个机会，一个可能性，改变自己的人生和方向，你要自己去判断，找到适合自己的方向，而读书是最好的药引子."</li>
+<li>高晓松老师提到选书的标准</li>
+<li>樊登老师: "寻找亮点", 并举例.</li>
+</ul>
+<p>整个过程让我想到了<strong>信念</strong>这个词语, <strong>如果一个观点在被人反对的时候, 你产生了愤怒的情绪, 那么这个观点就是你的信念</strong>. 记得有一次, QA说"如果做RD怎么容易, 那我也可以做", 我马上就怼回去, "你行你上啊". RD在我心中就是一个神圣不可侵犯的职业. 工作15年, 这是第2次在工作中产生了不满的情绪.</p>
+<p>先不论观点的对错, 将作为知名的读书人, 樊登老师在整个对话中显得不够平和, 不够谦虚. 但谁又能做得很好呢.</p>]]></content:encoded>
+            <category>奇葩说</category>
+            <category>信念</category>
+        </item>
+        <item>
+            <title><![CDATA[完全写作指南]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/27/完全写作指南</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/27/完全写作指南</guid>
+            <pubDate>Sun, 27 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[有一种说法, 未来的人才必须要有2个技能, 写作和演讲.  原因是可以用它们按指数级去影响更多的人. 购买了\这本书, 书的厚度让我紧张一下, 以为又读不完这本书了. 只能先硬着头皮上了.]]></description>
+            <content:encoded><![CDATA[<p>有一种说法, 未来的人才必须要有2个技能, 写作和演讲.  原因是可以用它们按<strong>指数级</strong>去影响更多的人. 购买了&lt;完全写作指南&gt;这本书, 书的厚度让我紧张一下, 以为又读不完这本书了. 只能先硬着头皮上了.</p>
+<p>这本书有一个很好的地方, 就是才用了"结论先行"的原则, 开篇第一章就把本书全部核心内容和盘托出.</p>
+<p>"写作需要明确<strong>目标</strong>, 确定<strong>读者</strong>, 用<strong>头脑风暴</strong>总结出中心思想, <strong>组织</strong>内容, 写<strong>初稿</strong>以及<strong>修改</strong>." 和之前学习的演讲技巧, 报告技巧是何其的相似.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="写作轮盘">写作轮盘<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E5%86%99%E4%BD%9C%E8%BD%AE%E7%9B%98" class="hash-link" aria-label="写作轮盘的直接链接" title="写作轮盘的直接链接">​</a></h2>
+<p>我们把几个要点设定为一个轮盘, 而不是一个流程. 原因在于你可以任意步骤开始进行, 按任意你的个人习惯去写作.
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-0f1adc57-46a016276377038a022cb5dfe7db3093.png" width="593" height="620" class="img_ev3q"></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="明确目标">明确目标<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E6%98%8E%E7%A1%AE%E7%9B%AE%E6%A0%87" class="hash-link" aria-label="明确目标的直接链接" title="明确目标的直接链接">​</a></h3>
+<p>有些目标很明确, 很直接; 有些目标就没有那么直接. 比如求职信, 你的直接目的是找工作, 但写信的目标或许应该是寻求一个面试的机会.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="明确读者">明确读者<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E6%98%8E%E7%A1%AE%E8%AF%BB%E8%80%85" class="hash-link" aria-label="明确读者的直接链接" title="明确读者的直接链接">​</a></h3>
+<ul>
+<li>信息
+你要给读者哪些信息? 他们已经掌握了多少?
+读者要做决策, 需要你提供哪些信息?</li>
+<li>态度
+你需要知道读者的态度是什么, 比如你要讲"太阳是方的", 你一定知道读者一定是怀疑态度, 你必须写出更多的信息去加以说明.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="头脑风暴">头脑风暴<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E5%A4%B4%E8%84%91%E9%A3%8E%E6%9A%B4" class="hash-link" aria-label="头脑风暴的直接链接" title="头脑风暴的直接链接">​</a></h3>
+<p>作者注意提出了下面几个步骤作为参考, 但头脑风暴的工具很多, 比如六项思考帽等等.</p>
+<ul>
+<li>想出的点子越多越好</li>
+<li>不要审查, 不要评论</li>
+<li>接受不同寻常的想法</li>
+<li>合并改进你的点子</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="组织文章">组织文章<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E7%BB%84%E7%BB%87%E6%96%87%E7%AB%A0" class="hash-link" aria-label="组织文章的直接链接" title="组织文章的直接链接">​</a></h3>
+<p>这个和文章本身的类型有关, 这里先不做具体描述.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="写初稿">写初稿<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E5%86%99%E5%88%9D%E7%A8%BF" class="hash-link" aria-label="写初稿的直接链接" title="写初稿的直接链接">​</a></h3>
+<p>略过.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="修改">修改<a href="https://cttmayi.github.io/blog/2019/10/27/%E5%AE%8C%E5%85%A8%E5%86%99%E4%BD%9C%E6%8C%87%E5%8D%97#%E4%BF%AE%E6%94%B9" class="hash-link" aria-label="修改的直接链接" title="修改的直接链接">​</a></h3>
+<p>修改的意义很广泛, 从反思, 重写,校对, 改错别字. 其中错别字是最容易发生的错误, 特别是在电子写作的年代.</p>]]></content:encoded>
+            <category>读书</category>
+            <category>笔记</category>
+        </item>
+        <item>
+            <title><![CDATA[NFC门禁卡复制]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制</guid>
+            <pubDate>Fri, 25 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[0.前言]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0前言">0.前言<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#0%E5%89%8D%E8%A8%80" class="hash-link" aria-label="0.前言的直接链接" title="0.前言的直接链接">​</a></h2>
+<p>由于租的小区房，只有一张门禁卡，女票每次过来进出小区很不方便，于是萌生了复制门禁卡的想法，国庆期间实践成功</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1硬件准备">1.硬件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#1%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="1.硬件准备的直接链接" title="1.硬件准备的直接链接">​</a></h2>
+<ul>
+<li>
+<p>NFC读写器：我选用的是PN532，就一个IC控制的PCB板，它通过串口与PC连接
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-5e63b125-b565c666f038c00edbe163f9f24cd726.png" width="283" height="259" class="img_ev3q"></p>
+</li>
+<li>
+<p>UID白卡：同PN532一样，某宝搜索UID卡即可搜索到
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-d2d83dd8-b6f7757d17fd571498ddb8ad95f03edd.png" width="354" height="345" class="img_ev3q"></p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2软件准备">2.软件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#2%E8%BD%AF%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="2.软件准备的直接链接" title="2.软件准备的直接链接">​</a></h2>
+<p>所有有关nfc的软件（Ubuntu/Win等）都是从GitHub上拉取的<a href="https://github.com/nfc-tools/libnfc" target="_blank" rel="noopener noreferrer">libnfc</a>编译生成的，如果你时间很多，可以去github上拉取源码编译，然后通过命令行进行NFC的读写（需要熟悉libnfc的命令行），如果没时间就使用别人编译好的上位机（一些大神们总是为小白制作了各式各样的方便好用的tool），例如我使用的是</p>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-811ab47a-8ca5bf159700ae3196dc3fe1e1531d4f.png" width="591" height="266" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3知识储备">3.知识储备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#3%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87" class="hash-link" aria-label="3.知识储备的直接链接" title="3.知识储备的直接链接">​</a></h2>
+<p>NFC卡复制需要了解NFC卡的数据结构</p>
+<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/20190124142629109-83161643.jpg" alt="20190124142629109.jpg" class="img_ev3q"></p>
+<p>通常NFC卡，一共有16个扇区，每个扇区4个块，每个块16个字节，因此一张NFC卡的容量为<code>16*4*16=1024</code>字节，通常每个扇区的第4块，用于存放密码A和密码B，即图中的KEY A和KEY B，密码A和密码B需要通过上位机进行破解，通常情况下，暴力破解都可破解，但是一般的卡其密码都是默认密码，我住的小区亦是如此，因此很容易就破解了</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4操作">4.操作<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="4.操作的直接链接" title="4.操作的直接链接">​</a></h2>
+<p>点击上位机的密钥破解即可自动破解，一旦破解便会保存一个<code>.mfd</code>文件，直接利用上位机将该文件写入空白uid卡即可，这里需要注意的是：</p>
+<p>&gt; 当向空白uid卡写入<code>.mdf</code>文件时，一共64个块，只会写进去63个块，还剩一个块不会写入，这个块就是保存有uid（世界唯一ID）数据和厂商数据的数据块，它位于0扇区的第0块，因此还需要手动写入uid数据（厂商数据貌似写不了，但我实测即使厂商数据不一致，门禁依然是可用的，说明一般情况下门禁不会对比厂商数据，它对比的是uid以及1~63扇区的数据）</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5参考">5.参考<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#5%E5%8F%82%E8%80%83" class="hash-link" aria-label="5.参考的直接链接" title="5.参考的直接链接">​</a></h2>
+<p>NFC的复制还可以结合到拥有NFC的手机上，更加便捷</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/3f851d531609" target="_blank" rel="noopener noreferrer">Ubuntu NFC环境</a></li>
+<li><a href="https://www.52pojie.cn/thread-883683-1-1.html" target="_blank" rel="noopener noreferrer">52破解</a></li>
+</ul>]]></content:encoded>
+            <category>NFC</category>
+        </item>
+        <item>
+            <title><![CDATA[向Python列表中append可变字典的正确姿势]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势</guid>
+            <pubDate>Fri, 25 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[0.问题由来]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0问题由来">0.问题由来<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#0%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5" class="hash-link" aria-label="0.问题由来的直接链接" title="0.问题由来的直接链接">​</a></h2>
+<p>在最近一些工具开发中，遇到这样一个bug，在debug中才发现问题所在，先上代码</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>按照常理l最终值为：</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>然而实际值为：</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>问题分析：</p>
+<p>在循环中，d相当于一个全局变量，d一旦更新，列表l中原有的d也会得到更新，所以导致了这样的情况出现；</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1正确姿势">1.正确姿势<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#1%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF" class="hash-link" aria-label="1.正确姿势的直接链接" title="1.正确姿势的直接链接">​</a></h2>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> i</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">l</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>]]></content:encoded>
+            <category>python3</category>
+        </item>
+        <item>
+            <title><![CDATA[RaspberryPi B2+搭建hass平台]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2搭建hass平台</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2搭建hass平台</guid>
+            <pubDate>Fri, 25 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[0.hass简介]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0hass简介">0.hass简介<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#0hass%E7%AE%80%E4%BB%8B" class="hash-link" aria-label="0.hass简介的直接链接" title="0.hass简介的直接链接">​</a></h2>
+<p>hass即homeassistant，是智能硬件的一个连接平台，它可以通过连接HomeKit、小米网关等控制Apple以及Xiaomi的硬件设备，也可以直接连接硬件设备，通过其Web/App进行控制。同时，它还有自动化的功能，通过配置可以实现智能家居的自动化控制，如进门开灯、室内温度高于阈值启动空调等。在<a href="https://www.home-assistant.io/components/" target="_blank" rel="noopener noreferrer">链接</a>中可以查看它所支持的硬件设备，除此之外，还可以自己DIY一些智能硬件，写好插件后，也同样能够连接到hass</p>
+<p>hass可以在多种平台上进行安装，包括win、ubuntu、软路由等，由于上学期间玩过RaspberryPi，有一块吃灰很久的Pi刚好可以用来安装hass</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1raspberry-b2系统安装">1.Raspberry B2+系统安装<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#1raspberry-b2%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85" class="hash-link" aria-label="1.Raspberry B2+系统安装的直接链接" title="1.Raspberry B2+系统安装的直接链接">​</a></h2>
+<p>树莓派的镜像可以在<a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank" rel="noopener noreferrer">官网</a>上下载，推荐使用Raspbian镜像，下载完之后通过<code>dd</code>(linux环境)命令将镜像刻录到sd卡，即可完成树莓派的镜像制作。需要注意的是，如果你没有显示器或串口工具，你可以在sd卡的<code>boot</code>文件下新建一个名为<code>ssh</code>的空白文件，树莓派启动后将会自动开启<code>ssh</code>服务，通过路由器查找到它的IP后，便可以<code>ssh</code>远程登录</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ ssh pi@192.168.2.234 #更换为你实际的IP地址，树莓派默认密码为raspberry</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>树莓派启动后，需要更新软件，但由于墙的原因，若使用其默认的源更新将会非常慢，因此需要更换源（<a href="https://mirror.tuna.tsinghua.edu.cn/help/raspbian/" target="_blank" rel="noopener noreferrer">清华源</a>），换源之后即可更新</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo apt-get update &amp;&amp; sudo apt-get upgrade</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2homeassistant安装">2.Homeassistant安装<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#2homeassistant%E5%AE%89%E8%A3%85" class="hash-link" aria-label="2.Homeassistant安装的直接链接" title="2.Homeassistant安装的直接链接">​</a></h2>
+<p>hass的安装使用了pip3，整个安装过程巨慢（不同网络环境，可能不一样），你可以先更换一下<a href="https://blog.csdn.net/sinat_21591675/article/details/82770360" target="_blank" rel="noopener noreferrer">pip源</a>，然后开始安装</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo apt-get install python3 python3-venv python3-pip #安装python3</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo useradd -rm homeassistant #添加用户</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ cd /srv</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo mkdir homeassistant</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo chown homeassistant:homeassistant homeassistant</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo su -s /bin/bash homeassistant #创建虚拟环境</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ cd /srv/homeassistant</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ python3 -m venv .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ source bin/activate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ python3 -m pip install wheel</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ pip3 install homeassistant  --upgrade #安装最新版</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>你也可以安装完python3后直接通过<code>pip3 install homeassistant  --upgrade</code>安装hass，但还是建议新建一个python虚拟环境进行安装，避免环境污染。</p>
+<p>由于整个安装过程非常缓慢，很有可能安装到一半就因为某些插件下载失败而停止，因此需要关注终端打印的相关log，譬如我在安装时，<code>home_assistant_frontend</code>这个插件（hass的web端相关的插件）死活装不上，只能自己手动新进安装，先找到其链接，并使用weget下载，最后使用pip3安装</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ wget https://www.piwheels.org/simple/home-assistant-frontend/home_assistant_frontend-20190828.0-py3-none-any.whl #使用wget download</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ pip3 install home_assistant_frontend-20190828.0-py3-none-any.whl</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>如果成功安装，执行<code>hass</code>命令后（第一次执行时会下载某些插件，也会非常缓慢），即可通过浏览器访问<code>树莓派IP:8312</code>访问hass了</p>
+<p>若登录不上，尝试在配置文件<code>configuration.yaml</code>中添加</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">http:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ssl_profile: intermediate</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="添加服务">添加服务<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#%E6%B7%BB%E5%8A%A0%E6%9C%8D%E5%8A%A1" class="hash-link" aria-label="添加服务的直接链接" title="添加服务的直接链接">​</a></h3>
+<p>如果你想更加方便地管理hass，你可以添加相关服务</p>
+<ul>
+<li>创建文件(若使用vim无法编辑，不知为何)</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo nano -w /etc/systemd/system/home-assistant@homeassistant.service </span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>添加如下内容，将<code>/srv/homeassistant/bin/hass</code>替换为你的hass的实际路径</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[Unit]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Description=Home Assistant</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">After=network-online.target</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">[Service]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Type=simple</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">User=%i</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ExecStart=/srv/homeassistant/bin/hass -c "/home/homeassistant/.homeassistant"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">[Install]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">WantedBy=multi-user.target</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>配置 systemd</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl --system daemon-reload #重载服务配置</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl enable home-assistant@homeassistant #将服务加入自启动</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>其他操作</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl disable home-assistant@homeassistant #移除自启动</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl start home-assistant@homeassistant #手动启动</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl stop home-assistant@homeassistant #手动停止</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo systemctl restart home-assistant@homeassistant #重启</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo journalctl -f -u home-assistant@homeassistant #查看输出</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="启用homekit功能">启用homekit功能<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#%E5%90%AF%E7%94%A8homekit%E5%8A%9F%E8%83%BD" class="hash-link" aria-label="启用homekit功能的直接链接" title="启用homekit功能的直接链接">​</a></h3>
+<p>最新hass已经内置homebridge，只需要配置一下即可支持homekit</p>
+<ul>
+<li>首先，安装homebridge的依赖</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ sudo apt-get install libavahi-compat-libdnssd-dev</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>其次，编辑配置文件<code>configuration.yaml</code></li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ cd /home/homeassistant/.homeassistant</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ vim configuration.yaml </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">#直接另起一行，添加如下内容即可</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">homekit:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">#添加完重启即可</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ul>
+<li>最后在hass的web端通知栏即可看到homekit的设置代码</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="参考">参考<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#%E5%8F%82%E8%80%83" class="hash-link" aria-label="参考的直接链接" title="参考的直接链接">​</a></h2>
+<ul>
+<li><a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer">官网</a></li>
+<li><a href="https://www.hachina.io/" target="_blank" rel="noopener noreferrer">HAChina</a></li>
+<li><a href="https://home-assistant.cc/component/xiaomi/wifi/" target="_blank" rel="noopener noreferrer">Home Assitant中文文档</a></li>
+<li><a href="https://www.jianshu.com/p/8f77a3f46f4d" target="_blank" rel="noopener noreferrer">树莓派安装 HomeAssistant</a></li>
+<li><a href="https://bbs.hassbian.com/forum.php" target="_blank" rel="noopener noreferrer">Hassbian BBS</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="最后">最后<a href="https://cttmayi.github.io/blog/2019/10/25/RaspberryPiB2%E6%90%AD%E5%BB%BAhass%E5%B9%B3%E5%8F%B0#%E6%9C%80%E5%90%8E" class="hash-link" aria-label="最后的直接链接" title="最后的直接链接">​</a></h2>
+<p>如果你想深入了解hass，hass的官方网站就很有必要去阅览一下；下一篇将介绍hass的几个智能硬件的连接</p>]]></content:encoded>
+            <category>hass</category>
+        </item>
+        <item>
+            <title><![CDATA[批判性思维练习 - 学校应该要求家长每天2小时辅导孩子写作业吗?]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/23/批判性思维练习学校应该要求家长每天2小时辅导孩子写作业吗</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/23/批判性思维练习学校应该要求家长每天2小时辅导孩子写作业吗</guid>
+            <pubDate>Wed, 23 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[直觉感受]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="直觉感受">直觉感受<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%AD%A6%E6%A0%A1%E5%BA%94%E8%AF%A5%E8%A6%81%E6%B1%82%E5%AE%B6%E9%95%BF%E6%AF%8F%E5%A4%A92%E5%B0%8F%E6%97%B6%E8%BE%85%E5%AF%BC%E5%AD%A9%E5%AD%90%E5%86%99%E4%BD%9C%E4%B8%9A%E5%90%97#%E7%9B%B4%E8%A7%89%E6%84%9F%E5%8F%97" class="hash-link" aria-label="直觉感受的直接链接" title="直觉感受的直接链接">​</a></h2>
+<p>学校<strong>不应该</strong>要求家长每天2小时辅导孩子写作业</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="重新审视10个问题">重新审视10个问题<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%AD%A6%E6%A0%A1%E5%BA%94%E8%AF%A5%E8%A6%81%E6%B1%82%E5%AE%B6%E9%95%BF%E6%AF%8F%E5%A4%A92%E5%B0%8F%E6%97%B6%E8%BE%85%E5%AF%BC%E5%AD%A9%E5%AD%90%E5%86%99%E4%BD%9C%E4%B8%9A%E5%90%97#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%8610%E4%B8%AA%E9%97%AE%E9%A2%98" class="hash-link" aria-label="重新审视10个问题的直接链接" title="重新审视10个问题的直接链接">​</a></h2>
+<ol>
+<li>
+<p>你面对的观点是什么?
+<strong>学校不应该要求家长每天2小时辅导孩子写作业.</strong></p>
+</li>
+<li>
+<p>审视这个观点, 对我重要吗? 我想要审视这个观点的目的是什么?
+<strong>练习目的, 跳过此问题</strong></p>
+</li>
+<li>
+<p>这个结论是在回应论题吗?
+<strong>是的</strong></p>
+</li>
+<li>
+<p>这个结论是怎么得出来的?
+<strong>家庭的时间属于家庭本身, 学校无权做任何要求.</strong></p>
+</li>
+<li>
+<p>思考过程中, 有没有什么概念的意思不够明确?
+<strong>没有</strong></p>
+</li>
+<li>
+<p>思考过程用到了哪些隐藏的假定?
+<strong>家长和学校没有从属关系, 学校没有权利做任何要求.</strong></p>
+</li>
+<li>
+<p>换一个信念, 你的结论会不同吗?
+<strong>没有</strong></p>
+</li>
+<li>
+<p>换一个立场, 你的结论会不同吗?
+<strong>学校立场: 此要求是为了你的孩子好, 学校并没有为此获得任何私利. 教育属于学校和家长共同的责任, 不应该只属于学校.</strong></p>
+</li>
+<li>
+<p>换一种情绪或欲望, 你的结论会不同吗?
+<strong>没有</strong></p>
+</li>
+<li>
+<p>这个结论, 是不是只在某些边界内适用?
+<strong>学校可以要求家长在周末参加家长会吗?</strong> =&gt; 直观感受是可以的.
+<strong>学校应该要求家长辅导孩子写作业吗?</strong> =&gt; 直观感受是可以的.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="最后结论">最后结论<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%AD%A6%E6%A0%A1%E5%BA%94%E8%AF%A5%E8%A6%81%E6%B1%82%E5%AE%B6%E9%95%BF%E6%AF%8F%E5%A4%A92%E5%B0%8F%E6%97%B6%E8%BE%85%E5%AF%BC%E5%AD%A9%E5%AD%90%E5%86%99%E4%BD%9C%E4%B8%9A%E5%90%97#%E6%9C%80%E5%90%8E%E7%BB%93%E8%AE%BA" class="hash-link" aria-label="最后结论的直接链接" title="最后结论的直接链接">​</a></h2>
+<p>保持<strong>不应该</strong>的结论.</p>
+<p><strong>学校应该要求家长辅导孩子写作业吗?</strong> 直观感受是可以的. 让我一时认为是<strong>度</strong>的问题. 但仔细思考, 还是我自己认为是应该这样做, 才认为"可以"的.</p>
+<p>我认可家长有教养责任, 教育责任并不等于"每天辅导2小时". 所以最后还是偏向于"不应该".</p>]]></content:encoded>
+            <category>批判性思维</category>
+            <category>刻意练习</category>
+        </item>
+        <item>
+            <title><![CDATA[批判性思维练习 -  养狗用户该多交物业费吗?]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/23/批判性思维练习养狗用户该多交物业费吗</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/23/批判性思维练习养狗用户该多交物业费吗</guid>
+            <pubDate>Wed, 23 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[先行结论]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="先行结论">先行结论<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%85%BB%E7%8B%97%E7%94%A8%E6%88%B7%E8%AF%A5%E5%A4%9A%E4%BA%A4%E7%89%A9%E4%B8%9A%E8%B4%B9%E5%90%97#%E5%85%88%E8%A1%8C%E7%BB%93%E8%AE%BA" class="hash-link" aria-label="先行结论的直接链接" title="先行结论的直接链接">​</a></h2>
+<p>先给一个直观感受的结论, 然后我们进行重新审视. 结论: 校区内养狗的人就<strong>应该</strong>多交物业费.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="重新审视10个问题">重新审视10个问题<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%85%BB%E7%8B%97%E7%94%A8%E6%88%B7%E8%AF%A5%E5%A4%9A%E4%BA%A4%E7%89%A9%E4%B8%9A%E8%B4%B9%E5%90%97#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%8610%E4%B8%AA%E9%97%AE%E9%A2%98" class="hash-link" aria-label="重新审视10个问题的直接链接" title="重新审视10个问题的直接链接">​</a></h2>
+<ol>
+<li>
+<p>你面对的观点是什么?这是一个判断, 一个猜想还是一个感觉?
+<strong>校区内养狗的人就应该多交物业费, 这是一个判断.</strong></p>
+</li>
+<li>
+<p>审视这个观点, 对我重要吗? 我想要审视这个观点的目的是什么?
+<strong>练习目的, 跳过此问题</strong></p>
+</li>
+<li>
+<p>这个结论是在回应论题吗?
+<strong>是的</strong></p>
+</li>
+<li>
+<p>这个结论是怎么得出来的?
+<strong>狗对小区公共环境进行破坏, 比如随地拉屎拉尿. 物业需要对破坏进行额外的维护, 所以, 校区内养狗住户是需要多交物业费的.</strong></p>
+</li>
+<li>
+<p>思考过程中, 有没有什么概念的意思不够明确?
+<strong>没有</strong></p>
+</li>
+<li>
+<p>思考过程用到了哪些隐藏的假定?
+<strong>如果造成额外的成本, 需要额外的付出.</strong></p>
+</li>
+<li>
+<p>换一个信念, 你的结论会不同吗?
+<strong>无</strong></p>
+</li>
+<li>
+<p>换一个立场, 你的结论会不同吗?
+<strong>不养狗住户(我的立场): 狗在校区对我的生活有影响.
+养狗住户: 养狗是我的自由.
+物业: 调查用户是否养狗需要额外的付出.</strong></p>
+</li>
+<li>
+<p>换一种情绪或欲望, 你的结论会不同吗?
+<strong>没有情绪</strong></p>
+</li>
+<li>
+<p>这个结论, 是不是只在某些边界内适用?
+<strong>养狗需要多缴税吗?</strong>
+<strong>有小孩的住户需要多交物业费吗?</strong></p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="后行结论">后行结论<a href="https://cttmayi.github.io/blog/2019/10/23/%E6%89%B9%E5%88%A4%E6%80%A7%E6%80%9D%E7%BB%B4%E7%BB%83%E4%B9%A0%E5%85%BB%E7%8B%97%E7%94%A8%E6%88%B7%E8%AF%A5%E5%A4%9A%E4%BA%A4%E7%89%A9%E4%B8%9A%E8%B4%B9%E5%90%97#%E5%90%8E%E8%A1%8C%E7%BB%93%E8%AE%BA" class="hash-link" aria-label="后行结论的直接链接" title="后行结论的直接链接">​</a></h2>
+<p>从"小孩"这个范例, 让我认为 <strong>"如果造成额外的成本, 需要额外的付出"</strong>. 这个基础假设有不完备的地方.
+暂定结论偏向于"校区内养狗的人就<strong>不需要</strong>多交物业费"</p>]]></content:encoded>
+            <category>批判性思维</category>
+            <category>刻意练习</category>
+        </item>
+        <item>
+            <title><![CDATA[审视信念]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/22/审视信念</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/22/审视信念</guid>
+            <pubDate>Tue, 22 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[在我们的思考中, 信念无时无刻不在影响我们的决策.]]></description>
+            <content:encoded><![CDATA[<p>在我们的思考中, 信念无时无刻不在影响我们的决策.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="什么是信念">什么是信念<a href="https://cttmayi.github.io/blog/2019/10/22/%E5%AE%A1%E8%A7%86%E4%BF%A1%E5%BF%B5#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BF%A1%E5%BF%B5" class="hash-link" aria-label="什么是信念的直接链接" title="什么是信念的直接链接">​</a></h2>
+<ul>
+<li>信念是一种你信奉, 并且践行的观念, 也是引导你作出选择和行动的一种精神动力</li>
+<li>信念是脱离于具体情况, 具体问题而存在的.</li>
+<li>信念既稳定又隐秘</li>
+</ul>
+<p><strong>信念主要的形成方式</strong></p>
+<ul>
+<li>
+<p>来自生物本能.
+来源于基因. 经过千百万年人类的进化积累. 但近千年人类发展过快, 这些基因显然跟不上人类的节奏了. 比如, &lt;<a href="http://www.gcsjj.cn/articles/2019/10/18/1571400726892.html" target="_blank" rel="noopener noreferrer">理性人</a>&gt;文章中提到的<strong>公平</strong>战胜了理性.</p>
+</li>
+<li>
+<p>个体在成长过着中, 不断被确认的个体经验.</p>
+</li>
+<li>
+<p>不断被灌输的社会共识.
+比如, "好好学习,天天向上", 从小被老师强行灌输的知识.</p>
+</li>
+<li>
+<p>由想象力构建起来的信念体系.
+最典型的就是宗教.</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="识别信念">识别信念<a href="https://cttmayi.github.io/blog/2019/10/22/%E5%AE%A1%E8%A7%86%E4%BF%A1%E5%BF%B5#%E8%AF%86%E5%88%AB%E4%BF%A1%E5%BF%B5" class="hash-link" aria-label="识别信念的直接链接" title="识别信念的直接链接">​</a></h2>
+<p>提供2个方法来判断哪些观点属于你的信念</p>
+<ol>
+<li>这个观念遭到反对时, 有没有从内心深处产生抵触和愤怒</li>
+<li>你有没有遗言或者冲动想要把这个观念变成所有人都认可和尊崇的原则</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="审视信念">审视信念<a href="https://cttmayi.github.io/blog/2019/10/22/%E5%AE%A1%E8%A7%86%E4%BF%A1%E5%BF%B5#%E5%AE%A1%E8%A7%86%E4%BF%A1%E5%BF%B5" class="hash-link" aria-label="审视信念的直接链接" title="审视信念的直接链接">​</a></h2>
+<p>不要把你的个人认同建立在某个信念内容本身上, 而是建立在这个信念的推导过程上. 这样一来, 你的某个信念如果被质疑, 被否定, 这代表的不是你这个人被质疑和否定, 而是你获得了一次思考能力的进化机会.</p>
+<p>注: 蔡钰 - 批判性思维15讲(笔记)</p>]]></content:encoded>
+            <category>批判性思维</category>
+            <category>笔记</category>
+        </item>
+        <item>
+            <title><![CDATA[青春期的教育]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/19/青春期的教育</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/19/青春期的教育</guid>
+            <pubDate>Sat, 19 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[昨天, 到华德福学校听了一节关于孩子青春期的讲座.]]></description>
+            <content:encoded><![CDATA[<p>昨天, 到华德福学校听了一节关于孩子青春期的讲座.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="青春期的核心问题">青春期的核心问题<a href="https://cttmayi.github.io/blog/2019/10/19/%E9%9D%92%E6%98%A5%E6%9C%9F%E7%9A%84%E6%95%99%E8%82%B2#%E9%9D%92%E6%98%A5%E6%9C%9F%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98" class="hash-link" aria-label="青春期的核心问题的直接链接" title="青春期的核心问题的直接链接">​</a></h2>
+<ul>
+<li>
+<p>叛逆
+青春期的最明确的特征就是叛逆, 作为父母, 首先要接受它, 并期待它的来临.</p>
+</li>
+<li>
+<p>对性的态度
+爱情与色情的区别是什么, 就是爱. 正确的引导孩子, 是父母重要的工作之一</p>
+</li>
+<li>
+<p>同伴关系
+在青春期, 孩子从重视<strong>父母/师生关系</strong>往<strong>同伴关系</strong>转变. 那个时候, 孩子不听父母的, 不听老师. 但他听他的伙伴的. 父母需要正确的利用伙伴关系, 引导孩子往更好的方向发展.</p>
+</li>
+<li>
+<p>自我确认
+孩子在这个阶段进行自我确认, "我是谁? 我在哪里?". 孩子开始为离开家庭, 来到社会进行必要准备.</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="华德福不同年龄段的差别">华德福不同年龄段的差别<a href="https://cttmayi.github.io/blog/2019/10/19/%E9%9D%92%E6%98%A5%E6%9C%9F%E7%9A%84%E6%95%99%E8%82%B2#%E5%8D%8E%E5%BE%B7%E7%A6%8F%E4%B8%8D%E5%90%8C%E5%B9%B4%E9%BE%84%E6%AE%B5%E7%9A%84%E5%B7%AE%E5%88%AB" class="hash-link" aria-label="华德福不同年龄段的差别的直接链接" title="华德福不同年龄段的差别的直接链接">​</a></h2>
+<ul>
+<li>7年级(初一)
+引导孩子需要有趣, 孩子逐步形成自己的观点</li>
+<li>8年级(初二)
+孩子由内往外的转变</li>
+<li>9年级(初三)
+形成独立思考, 具有逻辑思考的能力. 父母可以尝试批判性思维的引导</li>
+<li>10年级(高一)
+父母可以带孩子走出去, 让他找到自己的兴趣</li>
+<li>11年级(高二)
+这个年纪, 是孩子由外往内的过程</li>
+<li>12年级(高三)
+孩子开始寻求自由</li>
+</ul>]]></content:encoded>
+            <category>教育</category>
+        </item>
+        <item>
+            <title><![CDATA[C++ 空指针异常]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</guid>
+            <pubDate>Fri, 18 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.]]></description>
+            <content:encoded><![CDATA[<p>昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.</p>
+<p><strong>C++ 代码示意</strong></p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class Cls {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int c;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int add(a,b)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Cls :: func(a,b) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return a+b+this.c</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>异常发生点</strong>
+在func中报告空指针异常, this指针为空
+那么在什么情况下, this会为空呢?</p>
+<p><strong>错误的猜测</strong>
+同仁猜测是由于对象被析构了, 导致this为空</p>
+<p><strong>正确答案</strong>
+如下代码, cls的值为空指针.</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cls-&gt;func(a,b)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>同仁反驳, 如果cls为空, 问题点一定是发生在函数调用的地方, 及空指针报在cls的地方.</p>
+<p><strong>说明</strong>
+函数调用是不需要依赖于对象指针的(纯虚函数除外), cls的值是作为函数的第一个参数被传入, 及this值. 为什么之前有提到Java的误导, 因为Java的所有函数都是纯虚函数. 纯虚函数的调用会依赖于cls的值, 如果cls为空, 就会在函数调用是报空指针异常.</p>]]></content:encoded>
+            <category>C++</category>
+            <category>技术</category>
+        </item>
+        <item>
+            <title><![CDATA[理性人]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/18/理性人</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/18/理性人</guid>
+            <pubDate>Fri, 18 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[人是完全理性的吗? 一直认为不是所有人都是, 但至少我自己是. 直到如下的小测试, 我才发现, 原来我也不是]]></description>
+            <content:encoded><![CDATA[<p>人是完全理性的吗? 一直认为不是所有人都是, 但至少我自己是. 直到如下的小测试, 我才发现, 原来我也不是</p>
+<p><strong>小测试</strong>
+100枚金币分配给A, B两人, 由A提供方案,</p>
+<ul>
+<li>如果B同意, 就按此分配.</li>
+<li>如果B不同意, 则A,B都拿不到钱</li>
+</ul>
+<p>方案很多.  比如</p>
+<ul>
+<li>A全部</li>
+<li>B全部</li>
+<li>A, B平均</li>
+<li>A多, B少</li>
+<li>A少, B多</li>
+</ul>
+<p>那么A一定会提出一个B可以接受且对自己最有利的方案.</p>
+<p>那方案"A多, B少" 就是最佳方案. 假设A, B都是理性的人,   我们就可以把方案推演到极致, A分配99枚金币, B分配1枚金币.</p>
+<p>如果我是B, 我是绝对不能接受此方案的. 所以我也一定不是一个理性人.</p>
+<p>经过千万年的进化, 人类的基因中存在对"公平"的向往. 如果B不知道A分配到99枚金币, 在1枚金币和0枚金币的选择, B会毫不犹豫选择1枚金币. 但当B知道了这件事情, B会认为不公平, 而选择0枚金币.</p>
+<p>给我10岁测试了一下, 即使我的方案是51:49, 他都不会同意, 稍有些许意外. 我说他是一个完全感性的人. 他问理性人有什么好处呢? 好问题, 如果B是理性人, 他反而接受了最差的结果. 不是应该理性人应该得到更大的利益吗?</p>
+<p>在这题里, B如果是理性人, 他就需要完全装做是一个感性的人, 让A无法把他当做理性人对待, 或许这才是最大的理性吧.</p>]]></content:encoded>
+            <category>理性</category>
+            <category>随笔</category>
+        </item>
+        <item>
+            <title><![CDATA[我的个人使命宣言]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/13/我的个人使命宣言</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/13/我的个人使命宣言</guid>
+            <pubDate>Sun, 13 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[我的个人使命宣言]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="我的个人使命宣言">我的个人使命宣言<a href="https://cttmayi.github.io/blog/2019/10/13/%E6%88%91%E7%9A%84%E4%B8%AA%E4%BA%BA%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80#%E6%88%91%E7%9A%84%E4%B8%AA%E4%BA%BA%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80" class="hash-link" aria-label="我的个人使命宣言的直接链接" title="我的个人使命宣言的直接链接">​</a></h2>
+<p>思考良久, 写下我的第一版个人使命宣言</p>
+<ol>
+<li>诚信正直</li>
+<li>善于沟通, 健谈</li>
+<li>终身学习, 学富五车</li>
+<li>思维通达, 逻辑清晰</li>
+<li>可以影响更多的人</li>
+<li>自由选择生活</li>
+<li>孩子独立健康</li>
+<li>锻炼身体, 保持健康</li>
+<li>善于演讲和写作</li>
+<li>学习艺术/音乐</li>
+<li>做出社会贡献</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="我的角色">我的角色<a href="https://cttmayi.github.io/blog/2019/10/13/%E6%88%91%E7%9A%84%E4%B8%AA%E4%BA%BA%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80#%E6%88%91%E7%9A%84%E8%A7%92%E8%89%B2" class="hash-link" aria-label="我的角色的直接链接" title="我的角色的直接链接">​</a></h2>
+<ol>
+<li>
+<p>父亲
+在孩子错误的时候, 保护孩子;  培养孩子独立自主的精神</p>
+</li>
+<li>
+<p>主管
+领部署成功, 影响他们一起学习. 掌控工作与生活的平衡.</p>
+</li>
+<li>
+<p>下属
+诚信正直, 自我持续修炼.</p>
+</li>
+<li>
+<p>丈夫/儿子
+保持健康, 担负家庭责任.</p>
+</li>
+<li>
+<p>激励者
+学习写作/演讲, 影响更多的人.</p>
+</li>
+</ol>]]></content:encoded>
+            <category>101</category>
+        </item>
+        <item>
+            <title><![CDATA[高效能人士的七个习惯 - 习惯二 (以终为始)]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/11/高效能人士的七个习惯习惯二以终为始</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/11/高效能人士的七个习惯习惯二以终为始</guid>
+            <pubDate>Fri, 11 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[以终为始]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="以终为始">以终为始<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B" class="hash-link" aria-label="以终为始的直接链接" title="以终为始的直接链接">​</a></h2>
+<p>作者举例, 人生的终点就在你的葬礼. 你希望在那个时候听到孩子, 亲人, 朋友怎样的对你的评价. 我并不完全认同这个观点. 人生是在追求幸福, 人生的终点是幸福. 之前写的一篇文章<a href="http://www.gcsjj.cn/articles/2019/05/30/1559228173888.html" target="_blank" rel="noopener noreferrer">幸福的来源</a>讲述人生需要幸福缘由.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="主动设计你�的人生">主动设计你的人生<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E4%B8%BB%E5%8A%A8%E8%AE%BE%E8%AE%A1%E4%BD%A0%E7%9A%84%E4%BA%BA%E7%94%9F" class="hash-link" aria-label="主动设计你的人生的直接链接" title="主动设计你的人生的直接链接">​</a></h2>
+<p>任何事物都需要两次创造, 先在头脑中构思(即智力上的创造), 然后付诸实践(即体力上的创造). 不愿主动设计自己生活, 结果就会让影响圈外的事情掌控了自己, 其生活轨迹屈从于家庭, 同事, 朋友或环境的压力.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="撰写人生使命宣言六个步骤">撰写人生使命宣言(六个步骤)<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%92%B0%E5%86%99%E4%BA%BA%E7%94%9F%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80%E5%85%AD%E4%B8%AA%E6%AD%A5%E9%AA%A4" class="hash-link" aria-label="撰写人生使命宣言(六个步骤)的直接链接" title="撰写人生使命宣言(六个步骤)的直接链接">​</a></h2>
+<p>作者为我们提供了六个步骤, 帮忙我们寻找自己的终点</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤1-开动脑筋畅想">步骤1: 开动脑筋畅想<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A41-%E5%BC%80%E5%8A%A8%E8%84%91%E7%AD%8B%E7%95%85%E6%83%B3" class="hash-link" aria-label="步骤1: 开动脑筋畅想的直接链接" title="步骤1: 开动脑筋畅想的直接链接">​</a></h3>
+<ol>
+<li>写下一个对你有影响的人</li>
+<li>详细说明你想成为怎样的人</li>
+<li>请确定, 目前对你最重要的是什么</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤2-放松一下">步骤2: 放松一下<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A42-%E6%94%BE%E6%9D%BE%E4%B8%80%E4%B8%8B" class="hash-link" aria-label="步骤2: 放松一下的直接链接" title="步骤2: 放松一下的直接链接">​</a></h3>
+<p>深呼吸, 休息几分钟</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤3-整理你的思绪">步骤3: 整理你的思绪<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A43-%E6%95%B4%E7%90%86%E4%BD%A0%E7%9A%84%E6%80%9D%E7%BB%AA" class="hash-link" aria-label="步骤3: 整理你的思绪的直接链接" title="步骤3: 整理你的思绪的直接链接">​</a></h3>
+<p>回顾步骤1的内容, 圈出关键想法</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤4-写出初稿">步骤4: 写出初稿<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A44-%E5%86%99%E5%87%BA%E5%88%9D%E7%A8%BF" class="hash-link" aria-label="步骤4: 写出初稿的直接链接" title="步骤4: 写出初稿的直接链接">​</a></h3>
+<p>参考前面的内容, 撰写初稿, 并在一周内反复的修改</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤5-完成你的使命宣言">步骤5: 完成你的使命宣言<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A45-%E5%AE%8C%E6%88%90%E4%BD%A0%E7%9A%84%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80" class="hash-link" aria-label="步骤5: 完成你的使命宣言的直接链接" title="步骤5: 完成你的使命宣言的直接链接">​</a></h3>
+<p>抽个周末, 完成你的宣言, 放在一个便于随时翻阅的地方</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="步骤6-定期检查加以评估">步骤6: 定期检查加以评估<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%AD%A5%E9%AA%A46-%E5%AE%9A%E6%9C%9F%E6%A3%80%E6%9F%A5%E5%8A%A0%E4%BB%A5%E8%AF%84%E4%BC%B0" class="hash-link" aria-label="步骤6: 定期检查加以评估的直接链接" title="步骤6: 定期检查加以评估的直接链接">​</a></h3>
+<p>每个月问自己下列问题:</p>
+<ol>
+<li>我是否觉得这个使命宣言代表了最佳的自我?</li>
+<li>当我回顾这个使命宣言的时候是否感到有了方向, 目标, 挑战和动力?</li>
+<li>我的生活是否遵从了这个使命宣言中的理想和价值观?</li>
+</ol>]]></content:encoded>
+            <category>阅读</category>
+            <category>笔记</category>
+            <category>高效能人士的七个习惯</category>
+        </item>
+        <item>
+            <title><![CDATA[通识教育]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/10/通识教育</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/10/通识教育</guid>
+            <pubDate>Thu, 10 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[最近在好几个场合了解到通识教育,  让我对其产生了很大的兴趣.]]></description>
+            <content:encoded><![CDATA[<p>最近在好几个场合了解到<strong>通识教育</strong>,  让我对其产生了很大的兴趣.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="通识七艺">通识七艺<a href="https://cttmayi.github.io/blog/2019/10/10/%E9%80%9A%E8%AF%86%E6%95%99%E8%82%B2#%E9%80%9A%E8%AF%86%E4%B8%83%E8%89%BA" class="hash-link" aria-label="通识七艺的直接链接" title="通识七艺的直接链接">​</a></h2>
+<ol>
+<li>认识自我
+做好人生的规划、做好时间规划。</li>
+<li>认识他人
+锻炼“移情力”，更好地体察他人。</li>
+<li>家庭关系
+处理亲人关系，巩固家庭根基。</li>
+<li>思维锻炼
+学习哲学、逻辑，提高认知能力。</li>
+<li>表达能力
+整理思想、提炼观点，作有效的沟通。</li>
+<li>行动指南
+掌握博弈论，锻炼创新能力。</li>
+<li>信仰加持
+了解人在逆境中的自我救赎。</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="通识七观">通识七观<a href="https://cttmayi.github.io/blog/2019/10/10/%E9%80%9A%E8%AF%86%E6%95%99%E8%82%B2#%E9%80%9A%E8%AF%86%E4%B8%83%E8%A7%82" class="hash-link" aria-label="通识七观的直接链接" title="通识七观的直接链接">​</a></h2>
+<ol>
+<li>历史
+要想预测未来，最好的办法是了解历史。</li>
+<li>政治
+更好地理解决策的艺术。</li>
+<li>经济
+用新角度，发现别人未觉察的现象和趋势。</li>
+<li>社会
+了解社会的伦理和道德的演变。</li>
+<li>技术
+从演进的角度看技术的发展。</li>
+<li>国际
+了解大国博弈、地缘政治。</li>
+<li>文化
+从更广的视角讲述文明的边界。</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-d2e36009-4ff11708c2331e9894764cdd5aef9c76.png" width="1080" height="4355" class="img_ev3q"></p>]]></content:encoded>
+            <category>通识</category>
+        </item>
+        <item>
+            <title><![CDATA[算术题产生器]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/07/算术题产生器</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/07/算术题产生器</guid>
+            <pubDate>Mon, 07 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[国庆期间, 孩子老师布置70道算术题目, 为一劳永逸, 制作了一个算术题产生器.]]></description>
+            <content:encoded><![CDATA[<p>国庆期间, 孩子老师布置70道算术题目, 为一劳永逸, 制作了一个算术题产生器.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="开发效果图">开发效果图<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#%E5%BC%80%E5%8F%91%E6%95%88%E6%9E%9C%E5%9B%BE" class="hash-link" aria-label="开发效果图的直接链接" title="开发效果图的直接链接">​</a></h2>
+<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/image-8bbb12e3.jpg" alt="image.jpg" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="遗留功能开发">遗留功能开发<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#%E9%81%97%E7%95%99%E5%8A%9F%E8%83%BD%E5%BC%80%E5%8F%91" class="hash-link" aria-label="遗留功�能开发的直接链接" title="遗留功能开发的直接链接">​</a></h2>
+<ol>
+<li>添加混合运算功能</li>
+<li>调整算术题目比例</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="python-代码">Python 代码<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#python-%E4%BB%A3%E7%A0%81" class="hash-link" aria-label="Python 代码的直接链接" title="Python 代码的直接链接">​</a></h2>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">#-*- coding: utf-8 -*-</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> random</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> pygame</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">pygame</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">init</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">surface </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pygame</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">Surface</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">595</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">842</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">surface</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fill</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">font </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pygame</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">font</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">SysFont</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'arial'</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">28</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">get_int</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">min</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">max</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> random</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">randint</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">min</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">max</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">get_choice</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">choice</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> random</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">choice</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">choice</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">get_type</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">max</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> random</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">randint</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">max</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OP_ADD </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OP_SUB </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OP_MUL </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OP_DIV </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">op_4</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">type</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> args</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    flag </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> flags</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">type</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">while</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        i1 </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> get_int</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">args</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">args</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        i2 </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> get_int</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">args</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">args</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token builtin">type</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_SUB </span><span class="token keyword" style="color:#00009f">or</span><span class="token plain"> </span><span class="token builtin">type</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_DIV </span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> i1 </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> i2</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                </span><span class="token keyword" style="color:#00009f">break</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">else</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">break</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    s </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">' '</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">join</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">str</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> flag</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">str</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">'='</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">s</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    text </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> font</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">render</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">s</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">65</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">83</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">130</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">240</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> text</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">flags </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'+'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'-'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'\u00D7'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'\u00F7'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">conds </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">op_4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> OP_ADD</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic"># 加数1的范围1~999, 加数2的范围1~999</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">op_4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> OP_SUB</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic"># 被减数的范围1~999, 减数的范围1~999</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">op_4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> OP_MUL</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">9</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic"># 乘数1的范围2~999, 乘数2的范围2~9</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">op_4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> OP_DIV</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">999</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">9</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic"># 被除数的范围2~999, 除数的范围2~9</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">main</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">file</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    count </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">while</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token builtin">id</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> get_type</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">len</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">conds</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">-</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token builtin">id</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_ADD </span><span class="token keyword" style="color:#00009f">or</span><span class="token plain"> </span><span class="token builtin">id</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_SUB </span><span class="token keyword" style="color:#00009f">or</span><span class="token plain"> </span><span class="token builtin">id</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_MUL </span><span class="token keyword" style="color:#00009f">or</span><span class="token plain"> </span><span class="token builtin">id</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> OP_DIV </span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            cond </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> conds</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">id</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            func </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> cond</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token builtin">type</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> cond</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            args </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> cond</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            op </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> func</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">type</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> args</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> op</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                draw</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">op</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> count</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                count </span><span class="token operator" style="color:#393A34">+=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> count </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">50</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">break</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    pygame</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">image</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">save</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">surface</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">file</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">draw</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">text</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> count</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    surface</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">blit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">text</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">40</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">count </span><span class="token operator" style="color:#393A34">%</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">300</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">75</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token builtin">int</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">count</span><span class="token operator" style="color:#393A34">/</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">30</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">main</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"image.jpg"</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>]]></content:encoded>
+            <category>亲子</category>
+            <category>开发</category>
+        </item>
+        <item>
+            <title><![CDATA[我和我的祖国]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/06/我和我的祖国</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/06/我和我的祖国</guid>
+            <pubDate>Sun, 06 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[我和我的祖国，一刻也不能分割。]]></description>
+            <content:encoded><![CDATA[<p>我和我的祖国，一刻也不能分割。
+无论我走到哪里，都流出一首赞歌。
+我歌唱每一座高山，我歌唱每一条河。
+袅袅炊烟，小小村落, 路上一道辙.</p>
+<p>悠扬的歌声一直在我耳边响起. 没有任何时刻,比我现在更爱我的祖国.</p>
+<p>今天和朋友一起, 带了一群孩子去看了&lt;我和我的祖国&gt;这部电影.  希望带个孩子爱国的心, 孩子看了没什么感觉, 发现自己已经无法自拔, 感动不已.</p>
+<p>从1949年毛主席在天安门城楼上宣布中华人民共和国成立, 到2016年神舟飞船成功着陆. 电影中的7个故事无不让我们为祖国感到自豪.</p>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-8ddf1550-980823faca5c1f8bbeb133e5e535dbeb.png" width="996" height="340" class="img_ev3q"></p>
+<ol>
+<li>前夜 - 1949年10月1日, 中华人民共和国成立</li>
+<li>相遇 - 1964年10月16日, 中国第一颗原子弹爆炸成功</li>
+<li>夺冠 - 1984年8月8日, 中国女排奥运会夺冠, 首获世界大赛三连冠</li>
+<li>回归 - 1997月7月1日, 香港回归</li>
+<li>北京你好 - 2008年8月8日, 北京奥运会开幕式</li>
+<li>护航 - 2015年9月3日, 纪念抗战胜利70周年阅兵式</li>
+<li>白昼流行 - 2016年11月18日, 神舟十一号飞船返回舱成功着陆</li>
+</ol>]]></content:encoded>
+            <category>爱国</category>
+        </item>
+    </channel>
+</rss>

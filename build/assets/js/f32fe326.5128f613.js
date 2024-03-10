@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[40818],{55320:a=>{a.exports=JSON.parse('{"label":"AI","permalink":"/blog/tags/ai","allTagsPath":"/blog/tags","count":7,"unlisted":false}')}}]);

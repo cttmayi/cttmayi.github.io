@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[91039],{60179:e=>{e.exports=JSON.parse('{"label":"OpenMV","permalink":"/en/blog/tags/open-mv","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

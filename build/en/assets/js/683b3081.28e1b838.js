@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[80558],{13376:e=>{e.exports=JSON.parse('{"label":"\u751f\u6d3b","permalink":"/en/blog/tags/\u751f\u6d3b","allTagsPath":"/en/blog/tags","count":2,"unlisted":false}')}}]);

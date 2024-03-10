@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[4741],{61067:s=>{s.exports=JSON.parse('{"label":"C++","permalink":"/blog/tags/c","allTagsPath":"/blog/tags","count":2,"unlisted":false}')}}]);

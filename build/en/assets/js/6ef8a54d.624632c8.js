@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[54860],{36504:e=>{e.exports=JSON.parse('{"permalink":"/en/blog/page/4","page":4,"postsPerPage":10,"totalPages":15,"totalCount":147,"previousPage":"/en/blog/page/3","nextPage":"/en/blog/page/5","blogDescription":"Blog","blogTitle":"Blog"}')}}]);

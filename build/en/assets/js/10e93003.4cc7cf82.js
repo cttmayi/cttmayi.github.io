@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[23980],{59660:e=>{e.exports=JSON.parse('{"label":"Makefile","permalink":"/en/blog/tags/makefile","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);

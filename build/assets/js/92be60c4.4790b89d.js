@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[64994],{89537:s=>{s.exports=JSON.parse('{"label":"scikit-learn","permalink":"/blog/tags/scikit-learn","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
