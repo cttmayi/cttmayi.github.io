@@ -217,47 +217,6 @@
         <category label="笔记" term="笔记"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[NFC门禁卡复制]]></title>
-        <id>https://cttmayi.github.io/en/blog/2019/10/25/NFC门禁卡复制</id>
-        <link href="https://cttmayi.github.io/en/blog/2019/10/25/NFC门禁卡复制"/>
-        <updated>2019-10-25T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[0.前言]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0前言">0.前言<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#0%E5%89%8D%E8%A8%80" class="hash-link" aria-label="Direct link to 0.前言" title="Direct link to 0.前言">​</a></h2>
-<p>由于租的小区房，只有一张门禁卡，女票每次过来进出小区很不方便，于是萌生了复制门禁卡的想法，国庆期间实践成功</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1硬件准备">1.硬件准备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#1%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="Direct link to 1.硬件准备" title="Direct link to 1.硬件准备">​</a></h2>
-<ul>
-<li>
-<p>NFC读写器：我选用的是PN532，就一个IC控制的PCB板，它通过串口与PC连接
-<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-5e63b125-b565c666f038c00edbe163f9f24cd726.png" width="283" height="259" class="img_ev3q"></p>
-</li>
-<li>
-<p>UID白卡：同PN532一样，某宝搜索UID卡即可搜索到
-<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-d2d83dd8-b6f7757d17fd571498ddb8ad95f03edd.png" width="354" height="345" class="img_ev3q"></p>
-</li>
-</ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2软件准备">2.软件准备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#2%E8%BD%AF%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="Direct link to 2.软件准备" title="Direct link to 2.软件准备">​</a></h2>
-<p>所有有关nfc的软件（Ubuntu/Win等）都是从GitHub上拉取的<a href="https://github.com/nfc-tools/libnfc" target="_blank" rel="noopener noreferrer">libnfc</a>编译生成的，如果你时间很多，可以去github上拉取源码编译，然后通过命令行进行NFC的读写（需要熟悉libnfc的命令行），如果没时间就使用别人编译好的上位机（一些大神们总是为小白制作了各式各样的方便好用的tool），例如我使用的是</p>
-<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-811ab47a-8ca5bf159700ae3196dc3fe1e1531d4f.png" width="591" height="266" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3知识储备">3.知识储备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#3%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87" class="hash-link" aria-label="Direct link to 3.知识储备" title="Direct link to 3.知识储备">​</a></h2>
-<p>NFC卡复制需要了解NFC卡的数据结构</p>
-<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/20190124142629109-83161643.jpg" alt="20190124142629109.jpg" class="img_ev3q"></p>
-<p>通常NFC卡，一共有16个扇区，每个扇区4个块，每个块16个字节，因此一张NFC卡的容量为<code>16*4*16=1024</code>字节，通常每个扇区的第4块，用于存放密码A和密码B，即图中的KEY A和KEY B，密码A和密码B需要通过上位机进行破解，通常情况下，暴力破解都可破解，但是一般的卡其密码都是默认密码，我住的小区亦是如此，因此很容易就破解了</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4操作">4.操作<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="Direct link to 4.操作" title="Direct link to 4.操作">​</a></h2>
-<p>点击上位机的密钥破解即可自动破解，一旦破解便会保存一个<code>.mfd</code>文件，直接利用上位机将该文件写入空白uid卡即可，这里需要注意的是：</p>
-<p>&gt; 当向空白uid卡写入<code>.mdf</code>文件时，一共64个块，只会写进去63个块，还剩一个块不会写入，这个块就是保存有uid（世界唯一ID）数据和厂商数据的数据块，它位于0扇区的第0块，因此还需要手动写入uid数据（厂商数据貌似写不了，但我实测即使厂商数据不一致，门禁依然是可用的，说明一般情况下门禁不会对比厂商数据，它对比的是uid以及1~63扇区的数据）</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5参考">5.参考<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#5%E5%8F%82%E8%80%83" class="hash-link" aria-label="Direct link to 5.参考" title="Direct link to 5.参考">​</a></h2>
-<p>NFC的复制还可以结合到拥有NFC的手机上，更加便捷</p>
-<ul>
-<li><a href="https://www.jianshu.com/p/3f851d531609" target="_blank" rel="noopener noreferrer">Ubuntu NFC环境</a></li>
-<li><a href="https://www.52pojie.cn/thread-883683-1-1.html" target="_blank" rel="noopener noreferrer">52破解</a></li>
-</ul>]]></content>
-        <author>
-            <name>Ling Yuan</name>
-            <uri>https://github.com/cttmayi</uri>
-        </author>
-        <category label="NFC" term="NFC"/>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[RaspberryPi B2+搭建hass平台]]></title>
         <id>https://cttmayi.github.io/en/blog/2019/10/25/RaspberryPiB2搭建hass平台</id>
         <link href="https://cttmayi.github.io/en/blog/2019/10/25/RaspberryPiB2搭建hass平台"/>
@@ -326,6 +285,47 @@
             <uri>https://github.com/cttmayi</uri>
         </author>
         <category label="hass" term="hass"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[NFC门禁卡复制]]></title>
+        <id>https://cttmayi.github.io/en/blog/2019/10/25/NFC门禁卡复制</id>
+        <link href="https://cttmayi.github.io/en/blog/2019/10/25/NFC门禁卡复制"/>
+        <updated>2019-10-25T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[0.前言]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0前言">0.前言<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#0%E5%89%8D%E8%A8%80" class="hash-link" aria-label="Direct link to 0.前言" title="Direct link to 0.前言">​</a></h2>
+<p>由于租的小区房，只有一张门禁卡，女票每次过来进出小区很不方便，于是萌生了复制门禁卡的想法，国庆期间实践成功</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1硬件准备">1.硬件准备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#1%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="Direct link to 1.硬件准备" title="Direct link to 1.硬件准备">​</a></h2>
+<ul>
+<li>
+<p>NFC读写器：我选用的是PN532，就一个IC控制的PCB板，它通过串口与PC连接
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-5e63b125-b565c666f038c00edbe163f9f24cd726.png" width="283" height="259" class="img_ev3q"></p>
+</li>
+<li>
+<p>UID白卡：同PN532一样，某宝搜索UID卡即可搜索到
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-d2d83dd8-b6f7757d17fd571498ddb8ad95f03edd.png" width="354" height="345" class="img_ev3q"></p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2软件准备">2.软件准备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#2%E8%BD%AF%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="Direct link to 2.软件准备" title="Direct link to 2.软件准备">​</a></h2>
+<p>所有有关nfc的软件（Ubuntu/Win等）都是从GitHub上拉取的<a href="https://github.com/nfc-tools/libnfc" target="_blank" rel="noopener noreferrer">libnfc</a>编译生成的，如果你时间很多，可以去github上拉取源码编译，然后通过命令行进行NFC的读写（需要熟悉libnfc的命令行），如果没时间就使用别人编译好的上位机（一些大神们总是为小白制作了各式各样的方便好用的tool），例如我使用的是</p>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/en/assets/images/image-811ab47a-8ca5bf159700ae3196dc3fe1e1531d4f.png" width="591" height="266" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3知识储备">3.知识储备<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#3%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87" class="hash-link" aria-label="Direct link to 3.知识储备" title="Direct link to 3.知识储备">​</a></h2>
+<p>NFC卡复制需要了解NFC卡的数据结构</p>
+<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/20190124142629109-83161643.jpg" alt="20190124142629109.jpg" class="img_ev3q"></p>
+<p>通常NFC卡，一共有16个扇区，每个扇区4个块，每个块16个字节，因此一张NFC卡的容量为<code>16*4*16=1024</code>字节，通常每个扇区的第4块，用于存放密码A和密码B，即图中的KEY A和KEY B，密码A和密码B需要通过上位机进行破解，通常情况下，暴力破解都可破解，但是一般的卡其密码都是默认密码，我住的小区亦是如此，因此很容易就破解了</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4操作">4.操作<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="Direct link to 4.操作" title="Direct link to 4.操作">​</a></h2>
+<p>点击上位机的密钥破解即可自动破解，一旦破解便会保存一个<code>.mfd</code>文件，直接利用上位机将该文件写入空白uid卡即可，这里需要注意的是：</p>
+<p>&gt; 当向空白uid卡写入<code>.mdf</code>文件时，一共64个块，只会写进去63个块，还剩一个块不会写入，这个块就是保存有uid（世界唯一ID）数据和厂商数据的数据块，它位于0扇区的第0块，因此还需要手动写入uid数据（厂商数据貌似写不了，但我实测即使厂商数据不一致，门禁依然是可用的，说明一般情况下门禁不会对比厂商数据，它对比的是uid以及1~63扇区的数据）</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5参考">5.参考<a href="https://cttmayi.github.io/en/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#5%E5%8F%82%E8%80%83" class="hash-link" aria-label="Direct link to 5.参考" title="Direct link to 5.参考">​</a></h2>
+<p>NFC的复制还可以结合到拥有NFC的手机上，更加便捷</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/3f851d531609" target="_blank" rel="noopener noreferrer">Ubuntu NFC环境</a></li>
+<li><a href="https://www.52pojie.cn/thread-883683-1-1.html" target="_blank" rel="noopener noreferrer">52破解</a></li>
+</ul>]]></content>
+        <author>
+            <name>Ling Yuan</name>
+            <uri>https://github.com/cttmayi</uri>
+        </author>
+        <category label="NFC" term="NFC"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[向Python列表中append可变字典的正确姿势]]></title>
