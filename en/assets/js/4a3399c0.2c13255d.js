@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[50947],{94379:e=>{e.exports=JSON.parse('{"label":"wxPython","permalink":"/en/blog/tags/wx-python","allTagsPath":"/en/blog/tags","count":2,"unlisted":false}')}}]);

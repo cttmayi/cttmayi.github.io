@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[22825],{94109:e=>{e.exports=JSON.parse('{"label":"Kodu","permalink":"/en/blog/tags/kodu","allTagsPath":"/en/blog/tags","count":7,"unlisted":false}')}}]);

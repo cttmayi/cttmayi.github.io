@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[17118],{53035:l=>{l.exports=JSON.parse('{"label":"Matplotlib","permalink":"/en/blog/tags/matplotlib","allTagsPath":"/en/blog/tags","count":1,"unlisted":false}')}}]);
