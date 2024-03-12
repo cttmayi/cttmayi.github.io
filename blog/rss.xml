@@ -521,29 +521,6 @@
             <category>教育</category>
         </item>
         <item>
-            <title><![CDATA[C++ 空指针异常]]></title>
-            <link>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</link>
-            <guid>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</guid>
-            <pubDate>Fri, 18 Oct 2019 00:00:00 GMT</pubDate>
-            <description><![CDATA[昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.]]></description>
-            <content:encoded><![CDATA[<p>昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.</p>
-<p><strong>C++ 代码示意</strong></p>
-<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class Cls {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int c;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int add(a,b)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Cls :: func(a,b) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return a+b+this.c</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p><strong>异常发生点</strong>
-在func中报告空指针异常, this指针为空
-那么在什么情况下, this会为空呢?</p>
-<p><strong>错误的猜测</strong>
-同仁猜测是由于对象被析构了, 导致this为空</p>
-<p><strong>正确答案</strong>
-如下代码, cls的值为空指针.</p>
-<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cls-&gt;func(a,b)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>同仁反驳, 如果cls为空, 问题点一定是发生在函数调用的地方, 及空指针报在cls的地方.</p>
-<p><strong>说明</strong>
-函数调用是不需要依赖于对象指针的(纯虚函数除外), cls的值是作为函数的第一个参数被传入, 及this值. 为什么之前有提到Java的误导, 因为Java的所有函数都是纯虚函数. 纯虚函数的调用会依赖于cls的值, 如果cls为空, 就会在函数调用是报空指针异常.</p>]]></content:encoded>
-            <category>C++</category>
-            <category>技术</category>
-        </item>
-        <item>
             <title><![CDATA[理性人]]></title>
             <link>https://cttmayi.github.io/blog/2019/10/18/理性人</link>
             <guid>https://cttmayi.github.io/blog/2019/10/18/理性人</guid>
@@ -572,6 +549,29 @@
 <p>在这题里, B如果是理性人, 他就需要完全装做是一个感性的人, 让A无法把他当做理性人对待, 或许这才是最大的理性吧.</p>]]></content:encoded>
             <category>理性</category>
             <category>随笔</category>
+        </item>
+        <item>
+            <title><![CDATA[C++ 空指针异常]]></title>
+            <link>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</link>
+            <guid>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</guid>
+            <pubDate>Fri, 18 Oct 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.]]></description>
+            <content:encoded><![CDATA[<p>昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.</p>
+<p><strong>C++ 代码示意</strong></p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class Cls {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int c;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int add(a,b)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Cls :: func(a,b) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return a+b+this.c</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>异常发生点</strong>
+在func中报告空指针异常, this指针为空
+那么在什么情况下, this会为空呢?</p>
+<p><strong>错误的猜测</strong>
+同仁猜测是由于对象被析构了, 导致this为空</p>
+<p><strong>正确答案</strong>
+如下代码, cls的值为空指针.</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cls-&gt;func(a,b)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>同仁反驳, 如果cls为空, 问题点一定是发生在函数调用的地方, 及空指针报在cls的地方.</p>
+<p><strong>说明</strong>
+函数调用是不需要依赖于对象指针的(纯虚函数除外), cls的值是作为函数的第一个参数被传入, 及this值. 为什么之前有提到Java的误导, 因为Java的所有函数都是纯虚函数. 纯虚函数的调用会依赖于cls的值, 如果cls为空, 就会在函数调用是报空指针异常.</p>]]></content:encoded>
+            <category>C++</category>
+            <category>技术</category>
         </item>
         <item>
             <title><![CDATA[我的个人使命宣言]]></title>
