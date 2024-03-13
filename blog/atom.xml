@@ -2,11 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://cttmayi.github.io/blog</id>
     <title>学习笔记 Blog</title>
-    <updated>2019-11-26T00:00:00.000Z</updated>
+    <updated>2020-03-10T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://cttmayi.github.io/blog"/>
     <subtitle>学习笔记 Blog</subtitle>
     <icon>https://cttmayi.github.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[善意解释]]></title>
+        <id>https://cttmayi.github.io/blog/2020/03/10/善意解释</id>
+        <link href="https://cttmayi.github.io/blog/2020/03/10/善意解释"/>
+        <updated>2020-03-10T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[今天，和同事聊天。他讲了一个故事，大致是这样的，]]></summary>
+        <content type="html"><![CDATA[<p>今天，和同事聊天。他讲了一个故事，大致是这样的，</p>
+<p>同事的老婆让同事洗碗。洗完碗后，同事便去休息。同事的老婆大人检查厨房，发现还有两个碗没有洗，于是就批评同事是一个不负责任的人。其实这只是一件小事，不负责的论断一定会激起反抗情绪，即使同事真错了，也会去寻找各自理由去解释。</p>
+<p>摘抄了一段“精英日课”的话，</p>
+<ul>
+<li>能解释为愚蠢的，就不要解释为恶意。</li>
+<li>能解释为无知的，就不要解释为愚蠢。</li>
+<li>能耐解释为可原谅的错误的，就不要解释为无知。</li>
+<li>能用你未知的其他原因解释的，就不要解释为错误。</li>
+<li>能用一群人在复杂系统中的互动解释的，就不要解释为恶意或者愚蠢</li>
+<li>能解释为情绪的，就不要解释为策略</li>
+<li>只处理事实，不猜测动机</li>
+</ul>]]></content>
+        <author>
+            <name>Ling Yuan</name>
+            <uri>https://github.com/cttmayi</uri>
+        </author>
+        <category label="日记" term="日记"/>
+        <category label="101" term="101"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[printk 打印的参数异常问题]]></title>
         <id>https://cttmayi.github.io/blog/2019/11/26/printk打印的参数异常问题</id>
@@ -145,7 +170,7 @@
         <updated>2019-10-31T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[今天看到一篇文章\, 觉得很有趣. 我还是樊登读书会的会员呢, 不会那么夸张吧. 也去看了几遍视频.]]></summary>
         <content type="html"><![CDATA[<p>今天看到一篇文章&lt;<a href="https://www.jianshu.com/p/544ade149b86" target="_blank" rel="noopener noreferrer">樊登为什么会在《奇葩大会》败走麦城?</a>&gt;, 觉得很有趣. 我还是樊登读书会的会员呢, 不会那么夸张吧. 也去看了几遍<a href="https://www.iqiyi.com/v_19rrcp3kuo.html?list=19rrlsy1nq##curid=1035338300_53d6a2111fcc96753ce81225a76ea32c" target="_blank" rel="noopener noreferrer">视频</a>.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="樊的观点">樊的观点<a href="https://cttmayi.github.io/blog/2019/10/31/%E5%A5%87%E8%91%A9%E8%AF%B4%E6%A8%8A%E7%99%BBvs%E9%AB%98%E6%99%93%E6%9D%BE#%E6%A8%8A%E7%9A%84%E8%A7%82%E7%82%B9" class="hash-link" aria-label="樊的�观点的直接链接" title="樊的观点的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="樊的观点">樊的观点<a href="https://cttmayi.github.io/blog/2019/10/31/%E5%A5%87%E8%91%A9%E8%AF%B4%E6%A8%8A%E7%99%BBvs%E9%AB%98%E6%99%93%E6%9D%BE#%E6%A8%8A%E7%9A%84%E8%A7%82%E7%82%B9" class="hash-link" aria-label="樊的观点的直接链接" title="樊的观点的直接链接">​</a></h2>
 <p>总结了一下, 樊登老师的开场3分钟大致表达了如下几个点.</p>
 <ul>
 <li>读书是<strong>必需</strong>品, 是一件要命的事情.</li>
@@ -217,45 +242,27 @@
         <category label="笔记" term="笔记"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[NFC门禁卡复制]]></title>
-        <id>https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制</id>
-        <link href="https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制"/>
+        <title type="html"><![CDATA[向Python列表中append可变字典的正确姿势]]></title>
+        <id>https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势</id>
+        <link href="https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势"/>
         <updated>2019-10-25T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[0.前言]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0前言">0.前言<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#0%E5%89%8D%E8%A8%80" class="hash-link" aria-label="0.前言的直接链接" title="0.前言的直接链接">​</a></h2>
-<p>由于租的小区房，只有一张门禁卡，女票每次过来进出小区很不方便，于是萌生了复制门禁卡的想法，国庆期间实践成功</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1硬件准备">1.硬件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#1%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="1.硬件准备的直接链接" title="1.硬件准备的直接链接">​</a></h2>
-<ul>
-<li>
-<p>NFC读写器：我选用的是PN532，就一个IC控制的PCB板，它通过串口与PC连接
-<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-5e63b125-b565c666f038c00edbe163f9f24cd726.png" width="283" height="259" class="img_ev3q"></p>
-</li>
-<li>
-<p>UID白卡：同PN532一样，某宝搜索UID卡即可搜索到
-<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-d2d83dd8-b6f7757d17fd571498ddb8ad95f03edd.png" width="354" height="345" class="img_ev3q"></p>
-</li>
-</ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2软件准备">2.软件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#2%E8%BD%AF%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="2.软件准备的直接链接" title="2.软件准备的直接链接">​</a></h2>
-<p>所有有关nfc的软件（Ubuntu/Win等）都是从GitHub上拉取的<a href="https://github.com/nfc-tools/libnfc" target="_blank" rel="noopener noreferrer">libnfc</a>编译生成的，如果你时间很多，可以去github上拉取源码编译，然后通过命令行进行NFC的读写（需要熟悉libnfc的命令行），如果没时间就使用别人编译好的上位机（一些大神们总是为小白制作了各式各样的方便好用的tool），例如我使用的是</p>
-<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-811ab47a-8ca5bf159700ae3196dc3fe1e1531d4f.png" width="591" height="266" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3知识储备">3.知识储备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#3%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87" class="hash-link" aria-label="3.知识储备的直接链接" title="3.知识储备的直接链接">​</a></h2>
-<p>NFC卡复制需要了解NFC卡的数据结构</p>
-<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/20190124142629109-83161643.jpg" alt="20190124142629109.jpg" class="img_ev3q"></p>
-<p>通常NFC卡，一共有16个扇区，每个扇区4个块，每个块16个字节，因此一张NFC卡的容量为<code>16*4*16=1024</code>字节，通常每个扇区的第4块，用于存放密码A和密码B，即图中的KEY A和KEY B，密码A和密码B需要通过上位机进行破解，通常情况下，暴力破解都可破解，但是一般的卡其密码都是默认密码，我住的小区亦是如此，因此很容易就破解了</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4操作">4.操作<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="4.操作的直接链接" title="4.操作的直接链接">​</a></h2>
-<p>点击上位机的密钥破解即可自动破解，一旦破解便会保存一个<code>.mfd</code>文件，直接利用上位机将该文件写入空白uid卡即可，这里需要注意的是：</p>
-<p>&gt; 当向空白uid卡写入<code>.mdf</code>文件时，一共64个块，只会写进去63个块，还剩一个块不会写入，这个块就是保存有uid（世界唯一ID）数据和厂商数据的数据块，它位于0扇区的第0块，因此还需要手动写入uid数据（厂商数据貌似写不了，但我实测即使厂商数据不一致，门禁依然是可用的，说明一般情况下门禁不会对比厂商数据，它对比的是uid以及1~63扇区的数据）</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5参考">5.参考<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#5%E5%8F%82%E8%80%83" class="hash-link" aria-label="5.参考的直接链接" title="5.参考的直接链接">​</a></h2>
-<p>NFC的复制还可以结合到拥有NFC的手机上，更加便捷</p>
-<ul>
-<li><a href="https://www.jianshu.com/p/3f851d531609" target="_blank" rel="noopener noreferrer">Ubuntu NFC环境</a></li>
-<li><a href="https://www.52pojie.cn/thread-883683-1-1.html" target="_blank" rel="noopener noreferrer">52破解</a></li>
-</ul>]]></content>
+        <summary type="html"><![CDATA[0.问题由来]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0问题由来">0.问题由来<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#0%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5" class="hash-link" aria-label="0.问题由来的直接链接" title="0.问题由来的直接链接">​</a></h2>
+<p>在最近一些工具开发中，遇到这样一个bug，在debug中才发现问题所在，先上代码</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>按照常理l最终值为：</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>然而实际值为：</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>问题分析：</p>
+<p>在循环中，d相当于一个全局变量，d一旦更新，列表l中原有的d也会得到更新，所以导致了这样的情况出现；</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1正确姿势">1.正确姿势<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#1%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF" class="hash-link" aria-label="1.正确姿势的直接链接" title="1.正确姿势的直接链接">​</a></h2>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> i</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">l</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>]]></content>
         <author>
             <name>Ling Yuan</name>
             <uri>https://github.com/cttmayi</uri>
         </author>
-        <category label="NFC" term="NFC"/>
+        <category label="python3" term="python3"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[RaspberryPi B2+搭建hass平台]]></title>
@@ -328,27 +335,45 @@
         <category label="hass" term="hass"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[向Python列表中append可变字典的正确姿势]]></title>
-        <id>https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势</id>
-        <link href="https://cttmayi.github.io/blog/2019/10/25/向Python列表中append可变字典的正确姿势"/>
+        <title type="html"><![CDATA[NFC门禁卡复制]]></title>
+        <id>https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制</id>
+        <link href="https://cttmayi.github.io/blog/2019/10/25/NFC门禁卡复制"/>
         <updated>2019-10-25T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[0.问题由来]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0问题由来">0.问题由来<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#0%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5" class="hash-link" aria-label="0.问题由来的直接链接" title="0.问题由来的直接链接">​</a></h2>
-<p>在最近一些工具开发中，遇到这样一个bug，在debug中才发现问题所在，先上代码</p>
-<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>按照常理l最终值为：</p>
-<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>然而实际值为：</p>
-<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>问题分析：</p>
-<p>在循环中，d相当于一个全局变量，d一旦更新，列表l中原有的d也会得到更新，所以导致了这样的情况出现；</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1正确姿势">1.正确姿势<a href="https://cttmayi.github.io/blog/2019/10/25/%E5%90%91Python%E5%88%97%E8%A1%A8%E4%B8%ADappend%E5%8F%AF%E5%8F%98%E5%AD%97%E5%85%B8%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF#1%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF" class="hash-link" aria-label="1.正确姿势的直接链接" title="1.正确姿势的直接链接">​</a></h2>
-<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> i </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">range</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    d </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">'id'</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> i</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    l</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">append</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">l</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>]]></content>
+        <summary type="html"><![CDATA[0.前言]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="0前言">0.前言<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#0%E5%89%8D%E8%A8%80" class="hash-link" aria-label="0.前言的直接链接" title="0.前言的直接链接">​</a></h2>
+<p>由于租的小区房，只有一张门禁卡，女票每次过来进出小区很不方便，于是萌生了复制门禁卡的想法，国庆期间实践成功</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="1硬件准备">1.硬件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#1%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="1.硬件准备的直接链接" title="1.硬件准备的直接链接">​</a></h2>
+<ul>
+<li>
+<p>NFC读写器：我选用的是PN532，就一个IC控制的PCB板，它通过串口与PC连接
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-5e63b125-b565c666f038c00edbe163f9f24cd726.png" width="283" height="259" class="img_ev3q"></p>
+</li>
+<li>
+<p>UID白卡：同PN532一样，某宝搜索UID卡即可搜索到
+<img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-d2d83dd8-b6f7757d17fd571498ddb8ad95f03edd.png" width="354" height="345" class="img_ev3q"></p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="2软件准备">2.软件准备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#2%E8%BD%AF%E4%BB%B6%E5%87%86%E5%A4%87" class="hash-link" aria-label="2.软件准备的直接链接" title="2.软件准备的直接链接">​</a></h2>
+<p>所有有关nfc的软件（Ubuntu/Win等）都是从GitHub上拉取的<a href="https://github.com/nfc-tools/libnfc" target="_blank" rel="noopener noreferrer">libnfc</a>编译生成的，如果你时间很多，可以去github上拉取源码编译，然后通过命令行进行NFC的读写（需要熟悉libnfc的命令行），如果没时间就使用别人编译好的上位机（一些大神们总是为小白制作了各式各样的方便好用的tool），例如我使用的是</p>
+<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-811ab47a-8ca5bf159700ae3196dc3fe1e1531d4f.png" width="591" height="266" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="3知识储备">3.知识储备<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#3%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87" class="hash-link" aria-label="3.知识储备的直接链接" title="3.知识储备的直接链接">​</a></h2>
+<p>NFC卡复制需要了解NFC卡的数据结构</p>
+<p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/20190124142629109-83161643.jpg" alt="20190124142629109.jpg" class="img_ev3q"></p>
+<p>通常NFC卡，一共有16个扇区，每个扇区4个块，每个块16个字节，因此一张NFC卡的容量为<code>16*4*16=1024</code>字节，通常每个扇区的第4块，用于存放密码A和密码B，即图中的KEY A和KEY B，密码A和密码B需要通过上位机进行破解，通常情况下，暴力破解都可破解，但是一般的卡其密码都是默认密码，我住的小区亦是如此，因此很容易就破解了</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="4操作">4.操作<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="4.操作的直接链接" title="4.操作的直接链接">​</a></h2>
+<p>点击上位机的密钥破解即可自动破解，一旦破解便会保存一个<code>.mfd</code>文件，直接利用上位机将该文件写入空白uid卡即可，这里需要注意的是：</p>
+<p>&gt; 当向空白uid卡写入<code>.mdf</code>文件时，一共64个块，只会写进去63个块，还剩一个块不会写入，这个块就是保存有uid（世界唯一ID）数据和厂商数据的数据块，它位于0扇区的第0块，因此还需要手动写入uid数据（厂商数据貌似写不了，但我实测即使厂商数据不一致，门禁依然是可用的，说明一般情况下门禁不会对比厂商数据，它对比的是uid以及1~63扇区的数据）</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="5参考">5.参考<a href="https://cttmayi.github.io/blog/2019/10/25/NFC%E9%97%A8%E7%A6%81%E5%8D%A1%E5%A4%8D%E5%88%B6#5%E5%8F%82%E8%80%83" class="hash-link" aria-label="5.参考的直接链接" title="5.参考的直接链接">​</a></h2>
+<p>NFC的复制还可以结合到拥有NFC的手机上，更加便捷</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/3f851d531609" target="_blank" rel="noopener noreferrer">Ubuntu NFC环境</a></li>
+<li><a href="https://www.52pojie.cn/thread-883683-1-1.html" target="_blank" rel="noopener noreferrer">52破解</a></li>
+</ul>]]></content>
         <author>
             <name>Ling Yuan</name>
             <uri>https://github.com/cttmayi</uri>
         </author>
-        <category label="python3" term="python3"/>
+        <category label="NFC" term="NFC"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[批判性思维练习 -  养狗用户该多交物业费吗?]]></title>
@@ -572,6 +597,33 @@
         <category label="教育" term="教育"/>
     </entry>
     <entry>
+        <title type="html"><![CDATA[C++ 空指针异常]]></title>
+        <id>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</id>
+        <link href="https://cttmayi.github.io/blog/2019/10/18/C空指针异常"/>
+        <updated>2019-10-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.]]></summary>
+        <content type="html"><![CDATA[<p>昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.</p>
+<p><strong>C++ 代码示意</strong></p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class Cls {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int c;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int add(a,b)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Cls :: func(a,b) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return a+b+this.c</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>异常发生点</strong>
+在func中报告空指针异常, this指针为空
+那么在什么情况下, this会为空呢?</p>
+<p><strong>错误的猜测</strong>
+同仁猜测是由于对象被析构了, 导致this为空</p>
+<p><strong>正确答案</strong>
+如下代码, cls的值为空指针.</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cls-&gt;func(a,b)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>同仁反驳, 如果cls为空, 问题点一定是发生在函数调用的地方, 及空指针报在cls的地方.</p>
+<p><strong>说明</strong>
+函数调用是不需要依赖于对象指针的(纯虚函数除外), cls的值是作为函数的第一个参数被传入, 及this值. 为什么之前有提到Java的误导, 因为Java的所有函数都是纯虚函数. 纯虚函数的调用会依赖于cls的值, 如果cls为空, 就会在函数调用是报空指针异常.</p>]]></content>
+        <author>
+            <name>Ling Yuan</name>
+            <uri>https://github.com/cttmayi</uri>
+        </author>
+        <category label="C++" term="C++"/>
+        <category label="技术" term="技术"/>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[理性人]]></title>
         <id>https://cttmayi.github.io/blog/2019/10/18/理性人</id>
         <link href="https://cttmayi.github.io/blog/2019/10/18/理性人"/>
@@ -604,33 +656,6 @@
         </author>
         <category label="理性" term="理性"/>
         <category label="随笔" term="随笔"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C++ 空指针异常]]></title>
-        <id>https://cttmayi.github.io/blog/2019/10/18/C空指针异常</id>
-        <link href="https://cttmayi.github.io/blog/2019/10/18/C空指针异常"/>
-        <updated>2019-10-18T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.]]></summary>
-        <content type="html"><![CDATA[<p>昨天, 同仁遇到一题空指针问题,  我发现同仁对C++基础不甚了解, 或者是被Java给带偏了.</p>
-<p><strong>C++ 代码示意</strong></p>
-<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class Cls {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int c;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    int add(a,b)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Cls :: func(a,b) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    return a+b+this.c</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p><strong>异常发生点</strong>
-在func中报告空指针异常, this指针为空
-那么在什么情况下, this会为空呢?</p>
-<p><strong>错误的猜测</strong>
-同仁猜测是由于对象被析构了, 导致this为空</p>
-<p><strong>正确答案</strong>
-如下代码, cls的值为空指针.</p>
-<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cls-&gt;func(a,b)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="复制代码到剪贴板" title="复制" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<p>同仁反驳, 如果cls为空, 问题点一定是发生在函数调用的地方, 及空指针报在cls的地方.</p>
-<p><strong>说明</strong>
-函数调用是不需要依赖于对象指针的(纯虚函数除外), cls的值是作为函数的第一个参数被传入, 及this值. 为什么之前有提到Java的误导, 因为Java的所有函数都是纯虚函数. 纯虚函数的调用会依赖于cls的值, 如果cls为空, 就会在函数调用是报空指针异常.</p>]]></content>
-        <author>
-            <name>Ling Yuan</name>
-            <uri>https://github.com/cttmayi</uri>
-        </author>
-        <category label="C++" term="C++"/>
-        <category label="技术" term="技术"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[我的个人使命宣言]]></title>
@@ -690,7 +715,7 @@
         <summary type="html"><![CDATA[以终为始]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="以终为始">以终为始<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B" class="hash-link" aria-label="以终为始的直接链接" title="以终为始的直接链接">​</a></h2>
 <p>作者举例, 人生的终点就在你的葬礼. 你希望在那个时候听到孩子, 亲人, 朋友怎样的对你的评价. 我并不完全认同这个观点. 人生是在追求幸福, 人生的终点是幸福. 之前写的一篇文章<a href="http://www.gcsjj.cn/articles/2019/05/30/1559228173888.html" target="_blank" rel="noopener noreferrer">幸福的来源</a>讲述人生需要幸福缘由.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="主动设计你�的人生">主动设计你的人生<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E4%B8%BB%E5%8A%A8%E8%AE%BE%E8%AE%A1%E4%BD%A0%E7%9A%84%E4%BA%BA%E7%94%9F" class="hash-link" aria-label="主动设计你的人生的直接链接" title="主动设计你的人生的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="主动设计你的人生">主动设计你的人生<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E4%B8%BB%E5%8A%A8%E8%AE%BE%E8%AE%A1%E4%BD%A0%E7%9A%84%E4%BA%BA%E7%94%9F" class="hash-link" aria-label="主动设计你的人生的直接链接" title="主动设计你的人生的直接链接">​</a></h2>
 <p>任何事物都需要两次创造, 先在头脑中构思(即智力上的创造), 然后付诸实践(即体力上的创造). 不愿主动设计自己生活, 结果就会让影响圈外的事情掌控了自己, 其生活轨迹屈从于家庭, 同事, 朋友或环境的压力.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="撰写人生使命宣言六个步骤">撰写人生使命宣言(六个步骤)<a href="https://cttmayi.github.io/blog/2019/10/11/%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%E4%B9%A0%E6%83%AF%E4%BA%8C%E4%BB%A5%E7%BB%88%E4%B8%BA%E5%A7%8B#%E6%92%B0%E5%86%99%E4%BA%BA%E7%94%9F%E4%BD%BF%E5%91%BD%E5%AE%A3%E8%A8%80%E5%85%AD%E4%B8%AA%E6%AD%A5%E9%AA%A4" class="hash-link" aria-label="撰写人生使命宣言(六个步骤)的直接链接" title="撰写人生使命宣言(六个步骤)的直接链接">​</a></h2>
 <p>作者为我们提供了六个步骤, 帮忙我们寻找自己的终点</p>
@@ -780,7 +805,7 @@
         <content type="html"><![CDATA[<p>国庆期间, 孩子老师布置70道算术题目, 为一劳永逸, 制作了一个算术题产生器.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="开发效果图">开发效果图<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#%E5%BC%80%E5%8F%91%E6%95%88%E6%9E%9C%E5%9B%BE" class="hash-link" aria-label="开发效果图的直接链接" title="开发效果图的直接链接">​</a></h2>
 <p><img decoding="async" loading="lazy" src="https://img.hacpai.com/file/2019/10/image-8bbb12e3.jpg" alt="image.jpg" class="img_ev3q"></p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="遗留功能开发">遗留功能开发<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#%E9%81%97%E7%95%99%E5%8A%9F%E8%83%BD%E5%BC%80%E5%8F%91" class="hash-link" aria-label="遗留功�能开发的直接链接" title="遗留功能开发的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="遗留功能开发">遗留功能开发<a href="https://cttmayi.github.io/blog/2019/10/07/%E7%AE%97%E6%9C%AF%E9%A2%98%E4%BA%A7%E7%94%9F%E5%99%A8#%E9%81%97%E7%95%99%E5%8A%9F%E8%83%BD%E5%BC%80%E5%8F%91" class="hash-link" aria-label="遗留功能开发的直接链接" title="遗留功能开发的直接链接">​</a></h2>
 <ol>
 <li>添加混合运算功能</li>
 <li>调整算术题目比例</li>
@@ -793,34 +818,5 @@
         </author>
         <category label="亲子" term="亲子"/>
         <category label="开发" term="开发"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[我和我的祖国]]></title>
-        <id>https://cttmayi.github.io/blog/2019/10/06/我和我的祖国</id>
-        <link href="https://cttmayi.github.io/blog/2019/10/06/我和我的祖国"/>
-        <updated>2019-10-06T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[我和我的祖国，一刻也不能分割。]]></summary>
-        <content type="html"><![CDATA[<p>我和我的祖国，一刻也不能分割。
-无论我走到哪里，都流出一首赞歌。
-我歌唱每一座高山，我歌唱每一条河。
-袅袅炊烟，小小村落, 路上一道辙.</p>
-<p>悠扬的歌声一直在我耳边响起. 没有任何时刻,比我现在更爱我的祖国.</p>
-<p>今天和朋友一起, 带了一群孩子去看了&lt;我和我的祖国&gt;这部电影.  希望带个孩子爱国的心, 孩子看了没什么感觉, 发现自己已经无法自拔, 感动不已.</p>
-<p>从1949年毛主席在天安门城楼上宣布中华人民共和国成立, 到2016年神舟飞船成功着陆. 电影中的7个故事无不让我们为祖国感到自豪.</p>
-<p><img decoding="async" loading="lazy" alt="image" src="https://cttmayi.github.io/assets/images/image-8ddf1550-980823faca5c1f8bbeb133e5e535dbeb.png" width="996" height="340" class="img_ev3q"></p>
-<ol>
-<li>前夜 - 1949年10月1日, 中华人民共和国成立</li>
-<li>相遇 - 1964年10月16日, 中国第一颗原子弹爆炸成功</li>
-<li>夺冠 - 1984年8月8日, 中国女排奥运会夺冠, 首获世界大赛三连冠</li>
-<li>回归 - 1997月7月1日, 香港回归</li>
-<li>北京你好 - 2008年8月8日, 北京奥运会开幕式</li>
-<li>护航 - 2015年9月3日, 纪念抗战胜利70周年阅兵式</li>
-<li>白昼流行 - 2016年11月18日, 神舟十一号飞船返回舱成功着陆</li>
-</ol>]]></content>
-        <author>
-            <name>Ling Yuan</name>
-            <uri>https://github.com/cttmayi</uri>
-        </author>
-        <category label="爱国" term="爱国"/>
     </entry>
 </feed>
