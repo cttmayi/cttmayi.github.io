@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[72846],{62658:a=>{a.exports=JSON.parse('{"label":"LaTex","permalink":"/blog/tags/la-tex","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);

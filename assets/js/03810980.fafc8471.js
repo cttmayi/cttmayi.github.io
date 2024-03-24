@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[75468],{84238:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/\u7ffb\u8bd1","page":1,"postsPerPage":10,"totalPages":1,"totalCount":6,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

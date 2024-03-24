@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[21592],{21171:s=>{s.exports=JSON.parse('{"label":"I2C","permalink":"/blog/tags/i-2-c","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);

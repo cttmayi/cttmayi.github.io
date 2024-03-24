@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[61316],{37793:a=>{a.exports=JSON.parse('{"label":"UART","permalink":"/blog/tags/uart","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);

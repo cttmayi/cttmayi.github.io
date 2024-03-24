@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[63],{9350:e=>{e.exports=JSON.parse('{"title":"\u7b97\u6cd5\u6a21\u578b","slug":"/category/\u7b97\u6cd5\u6a21\u578b","permalink":"/category/\u7b97\u6cd5\u6a21\u578b","navigation":{"previous":{"title":"AIGC","permalink":"/"},"next":{"title":"CNN","permalink":"/\u7b97\u6cd5\u6a21\u578b/CNN"}}}')}}]);

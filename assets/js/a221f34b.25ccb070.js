@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_github=self.webpackChunkmy_github||[]).push([[85770],{37533:a=>{a.exports=JSON.parse('{"label":"datatables","permalink":"/blog/tags/datatables","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
